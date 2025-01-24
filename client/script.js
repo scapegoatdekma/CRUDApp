@@ -13,7 +13,6 @@ async function fetchProducts() {
       "Ошибка при загрузке данных. Попробуйте перезагрузить страницу.";
   }
 }
-s;
 function displayProducts(products) {
   const productsList = document.getElementById("products__list");
   products.forEach((product) => {
