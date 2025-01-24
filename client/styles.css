@@ -1,0 +1,45 @@
+:root {
+  --bgc: #121212;
+  --ttlclr: #e9e9e9;
+  --fntclr: #4eafff;
+}
+* {
+  font-family: "Trebuchet MS", sans-serif;
+}
+html {
+  background-color: var(--bgc);
+  font-size: 62.5%;
+}
+.products {
+  min-width: 512px;
+  position: absolute;
+  padding: 2rem 5rem;
+  /* From https://css.glass */
+  background: rgba(154, 159, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: inline-block;
+}
+.center {
+  right: 50%;
+  bottom: 50%;
+  transform: translate(50%, 50%);
+  position: absolute;
+}
+.products__title {
+  font-size: 6rem;
+  color: var(--ttlclr);
+}
+.products__list {
+  margin-right: 20rem;
+}
+.products__li {
+  list-style: none;
+  font-size: 2.4rem;
+  color: var(--fntclr);
+  margin-bottom: 0.2rem;
+  margin-left: 20rem;
+}
