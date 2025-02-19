@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../styles/css/home.min.css" />
+  </head>
+  <body>
+    <main class="main">
+      <aside class="sider active" id="sider">
+        <a href="#" class="logo">
+          <div class="brand">
+            <i class="fa fa-bars burger-menu" id="toggle-sider1"></i>
+
+            <img src="../images/svg/icon-white.svg" alt="" />
+            <span> SolLine </span>
+          </div>
+          <!-- <i class="fa fa-bars burger-menu" id="toggle-sider"></i> -->
+        </a>
+        <div class="sider_content active">
+          <div class="sider-user">
+            <img src="../images/png/empty-avatar.jpg" class="avatar" alt="" />
+            <div class="content">
+              <div class="name">
+                Привет, <span class="user_name">{your_name}</span>
+                <div class="online">online</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div class="content">
+        <header class="header">
+          <div class="flex">
+            <i class="fa fa-bars burger-menu" id="toggle-sider"></i>
+            <div class="right">
+              <div class="icons">
+                <i class="fa fa-users company">
+                  <span class="counter">1</span>
+                </i>
+                <i class="fa fa-envelope mail">
+                  <span class="counter">1</span>
+                </i>
+              </div>
+              <div class="user">
+                <i class="fa fa-user account"></i>
+                <span class="user_name">{your_name}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+        <div class="dashboard">
+          <section class="title-section">
+            <div class="title">
+              <i class="fa fa-tachometer"></i>
+              <h2>Dashboard</h2>
+            </div>
+            <p class="subtitle">Основная информация</p>
+          </section>
+          <section class="card-section">
+            <div class="card-element">
+              <div class="content">
+                <i class="fa fa-download"></i>
+                <div class="counter">316</div>
+                <div class="title">Входящие заявки</div>
+              </div>
+              <a href="#" class="goto">Перейти</a>
+            </div>
+            <div class="card-element">
+              <div class="content">
+                <i class="fa fa-lock"></i>
+                <div class="counter">18</div>
+                <div class="title">Взято в обработку мной</div>
+              </div>
+              <a href="#" class="goto">Перейти</a>
+            </div>
+            <div class="card-element">
+              <div class="content">
+                <i class="fa fa-upload"></i>
+                <div class="counter">274</div>
+                <div class="title">Исходящие заявки</div>
+              </div>
+              <a href="#" class="goto">Перейти</a>
+            </div>
+            <div class="card-element">
+              <div class="content">
+                <i class="fa fa-check"></i>
+                <div class="counter">14</div>
+                <div class="title">Выполненные заявки</div>
+              </div>
+              <a href="#" class="goto">Перейти</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <!-- <footer class="footer">footer</footer> -->
+    <script src="../node_modules/axios/dist/axios.min.js"></script>
+    <script src="../js/home.js"></script>
+  </body>
+</html>

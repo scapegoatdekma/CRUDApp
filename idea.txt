@@ -1,0 +1,191 @@
+I. Сущности:
+
+Пользователи (Users):
+Описание: Представляет как клиентов, создающих запросы, так и агентов поддержки, обрабатывающих их.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор пользователя.
+username (VARCHAR): Имя пользователя.
+email (VARCHAR, UNIQUE): Адрес электронной почты.
+password (VARCHAR): Хэш пароля.
+first_name (VARCHAR): Имя.
+last_name (VARCHAR): Фамилия.
+role (ENUM(‘client’, ‘agent’, ‘admin’)): Роль пользователя (клиент, агент, администратор).
+is_active (BOOLEAN): Статус активности пользователя.
+created_at (TIMESTAMP): Дата создания записи.
+updated_at (TIMESTAMP): Дата обновления записи.
+avatar_url (VARCHAR, NULLABLE): URL аватара пользователя.
+Тикеты (Tickets):
+Описание: Представляет запрос в службу поддержки.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор тикета.
+subject (VARCHAR): Тема тикета.
+description (TEXT): Полное описание проблемы.
+status (ENUM(‘open’, ‘in_progress’, ‘resolved’, ‘closed’)): Статус тикета.
+priority (ENUM(‘low’, ‘medium’, ‘high’, ‘urgent’)): Приоритет тикета.
+category_id (INT, FOREIGN KEY): ID категории тикета.
+client_id (INT, FOREIGN KEY): ID пользователя, создавшего тикет.
+agent_id (INT, FOREIGN KEY, NULLABLE): ID агента, назначенного на тикет.
+created_at (TIMESTAMP): Дата создания тикета.
+updated_at (TIMESTAMP): Дата обновления тикета.
+resolved_at (TIMESTAMP, NULLABLE): Дата решения тикета.
+Категории (Categories):
+Описание: Классифицирует тикеты для упрощения маршрутизации и отчетности.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор категории.
+name (VARCHAR): Название категории (например, “Техническая поддержка”, “Вопросы оплаты”).
+description (TEXT, NULLABLE): Описание категории.
+created_at (TIMESTAMP): Дата создания записи.
+updated_at (TIMESTAMP): Дата обновления записи.
+Комментарии (Comments):
+Описание: Представляет комментарии к тикету, добавленные клиентами или агентами.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор комментария.
+ticket_id (INT, FOREIGN KEY): ID тикета, к которому относится комментарий.
+user_id (INT, FOREIGN KEY): ID пользователя, оставившего комментарий.
+comment_text (TEXT): Текст комментария.
+created_at (TIMESTAMP): Дата создания комментария.
+Вложения (Attachments):
+Описание: Файлы, прикрепленные к тикетам или комментариям.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор вложения.
+ticket_id (INT, FOREIGN KEY, NULLABLE): ID тикета, к которому относится вложение.
+comment_id (INT, FOREIGN KEY, NULLABLE): ID комментария, к которому относится вложение.
+file_name (VARCHAR): Имя файла.
+file_path (VARCHAR): Путь к файлу в файловой системе или хранилище.
+file_size (INT): Размер файла (в байтах).
+created_at (TIMESTAMP): Дата создания записи.
+Назначения (Assignments):
+Описание: История назначений тикетов агентам.
+Атрибуты:
+id (INT, PRIMARY KEY): Уникальный идентификатор назначения.
+ticket_id (INT, FOREIGN KEY): ID тикета.
+agent_id (INT, FOREIGN KEY): ID назначенного агента.
+assigned_by_id (INT, FOREIGN KEY): ID пользователя (агента или администратора), который назначил тикет.
+assigned_at (TIMESTAMP): Дата и время назначения.
+unassigned_at (TIMESTAMP, NULLABLE): Дата и время снятия назначения (если тикет был переназначен).
+II. Функционал:
+
+Аутентификация и авторизация:
+Вход/регистрация пользователей (клиентов, агентов, администраторов).
+Разграничение доступа в зависимости от роли пользователя.
+Управление тикетами (для клиентов):
+Создание тикетов (с указанием темы, описания, приоритета, категории, вложений).
+Просмотр списка своих тикетов (с фильтрацией по статусу, приоритету и т.д.).
+Просмотр деталей тикета.
+Добавление комментариев к тикету.
+Закрытие тикета (если проблема решена).
+Управление тикетами (для агентов):
+Просмотр списка всех тикетов (с фильтрацией по статусу, приоритету, категории, назначенному агенту и т.д.).
+Просмотр деталей тикета.
+Назначение тикета себе или другому агенту.
+Изменение статуса тикета.
+Изменение приоритета тикета.
+Добавление комментариев к тикету.
+Закрытие тикета.
+Управление пользователями (для администраторов):
+Создание, редактирование и удаление пользователей.
+Управление ролями пользователей.
+Активация/деактивация учетных записей пользователей.
+Управление категориями (для администраторов):
+Создание, редактирование и удаление категорий.
+Отчетность (для администраторов и руководителей):
+Количество созданных тикетов за период.
+Среднее время решения тикета.
+Распределение тикетов по категориям.
+Загрузка агентов.
+Другие метрики.
+Уведомления:
+Уведомления по электронной почте о новых тикетах, комментариях и изменениях статуса.
+Поиск:
+Поиск тикетов по теме, описанию, комментариям, ID тикета и т.д.
+III. Элементы UI (на основе вашего скриншота):
+
+Сайдбар:
+Аватар пользователя.
+Имя пользователя.
+Список разделов (Dashboard, Tickets, Users, Categories, Reports и т.д.).
+Иконки для каждого раздела.
+Панель Dashboard:
+Статистические карточки (количество входящих, взятых в обработку, исходящих, выполненных заявок).
+Графики и диаграммы (для визуализации данных).
+Список последних тикетов.
+Список тикетов:
+Таблица с информацией о тикетах (ID, тема, статус, приоритет, категория, дата создания, назначенный агент).
+Фильтры и сортировка.
+Кнопка “Создать тикет”.
+Страница тикета:
+Тема тикета.
+Описание тикета.
+Статус, приоритет, категория.
+Список комментариев (с возможностью добавления новых комментариев).
+Информация о клиенте и назначенном агенте.
+Кнопки для изменения статуса, приоритета, назначения агента и т.д.
+Вложения.
+Страницы управления пользователями и категориями:
+Таблицы со списками пользователей и категорий.
+Формы для создания и редактирования пользователей и категорий.
+IV. Таблицы в БД:
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    role ENUM('client', 'agent', 'admin') NOT NULL DEFAULT 'client',
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    avatar_url VARCHAR(255)
+);
+
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tickets (
+    id SERIAL PRIMARY KEY,
+    subject VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    status ENUM('open', 'in_progress', 'resolved', 'closed') NOT NULL DEFAULT 'open',
+    priority ENUM('low', 'medium', 'high', 'urgent') NOT NULL DEFAULT 'medium',
+    category_id INTEGER REFERENCES categories(id) NOT NULL,
+    client_id INTEGER REFERENCES users(id) NOT NULL,
+    agent_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    resolved_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    ticket_id INTEGER REFERENCES tickets(id) NOT NULL,
+    user_id INTEGER REFERENCES users(id) NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE attachments (
+    id SERIAL PRIMARY KEY,
+    ticket_id INTEGER REFERENCES tickets(id),
+    comment_id INTEGER REFERENCES comments(id),
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    file_size INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE assignments (
+    id SERIAL PRIMARY KEY,
+    ticket_id INTEGER REFERENCES tickets(id) NOT NULL,
+    agent_id INTEGER REFERENCES users(id) NOT NULL,
+    assigned_by_id INTEGER REFERENCES users(id) NOT NULL,
+    assigned_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    unassigned_at TIMESTAMP WITH TIME ZONE
+);
+
