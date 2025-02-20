@@ -3,20 +3,12 @@ const getUsername = () => {
 };
 const siderController = () => {
   const sider = document.getElementById("sider");
-  const toggleSider = document.getElementById("toggle-sider");
-  const toggleSider1 = document.getElementById("toggle-sider1");
-  const windowInnerWidth = window.innerWidth;
-
-  if (windowInnerWidth <= 1165) {
-  }
   const sider_content = document.querySelector(".sider_content");
+  const chat = document.getElementById("chat");
+  const toggleSider = document.getElementById("toggle-sider");
+  const toggleChat = document.getElementById("toggle-chat");
 
   toggleSider.addEventListener("click", () => {
-    // alert(1);
-    sider.classList.toggle("active");
-    sider_content.classList.toggle("active");
-  });
-  toggleSider1.addEventListener("click", () => {
     // alert(1);
     sider.classList.toggle("active");
     sider_content.classList.toggle("active");
@@ -24,6 +16,16 @@ const siderController = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  window.dispatchEvent(new Event("resize"));
+
+  const windowInnerWidth = window.innerWidth;
+  const sider = document.getElementById("sider");
+  const sider_content = document.querySelector(".sider_content");
+
+  if (windowInnerWidth <= 1165) {
+    sider.classList.remove("active");
+    sider_content.classList.remove("active");
+  }
   const userName = document.querySelectorAll(".user_name");
   userName.forEach((name) => {
     name.innerHTML = "";

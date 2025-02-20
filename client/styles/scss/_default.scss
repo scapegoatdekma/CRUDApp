@@ -13,6 +13,8 @@
 @import "reset";
 :root {
   --bg-color: #010314;
+  --box-bg-color: #080a1a;
+  --box-border: 1px solid #35353565;
   --gray-color: #969696;
   --primary: #7752fe;
   --gradient-offset: 100%;
@@ -33,6 +35,11 @@
     transparent 40%,
     #63e 70%,
     #fff 100%
+  );
+  --menu-item-active: radial-gradient(
+    ellipse farthest-corner at 100% 50%,
+    rgba(0, 0, 0, 1) 70%,
+    rgb(23, 11, 58) 100%
   );
   --top-darken-bg: radial-gradient(
     120% 120% at 50% 100%,
