@@ -15,6 +15,14 @@ const siderController = () => {
   });
 };
 
+const avatarController = () => {
+  const avatarpath = localStorage.getItem("avatar");
+  const avatars = document.querySelectorAll(".avatar");
+  console.log("ava", avatarpath);
+  avatars.forEach((avatar) => {
+    avatar.setAttribute("src", avatarpath);
+  });
+};
 document.addEventListener("DOMContentLoaded", () => {
   window.dispatchEvent(new Event("resize"));
 
@@ -35,4 +43,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   siderController();
+  avatarController();
 });

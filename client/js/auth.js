@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(data);
 
     axios
-      .get("http://localhost:4200/api/users", {
+      .get("http://localhost:4200/api/users/auth", {
         params: data, // Передаем данные как параметры запроса
       })
       .then((response) => {
-        let user = response.data[0];
+        let user = response.data;
 
         if (user) {
           // Пользователь найден
@@ -27,7 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("username", user.username);
           localStorage.setItem("email", user.email);
           localStorage.setItem("hash", user.password);
-          window.location.href = "./home.html";
+          localStorage.setItem("avatar", user.avatar);
+          console.log(user.avatar);
+
+          // window.location.href = "./home.html";
         } else {
           // Пользователь не найден
           alert("Неверный логин или пароль!");

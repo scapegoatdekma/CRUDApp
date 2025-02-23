@@ -15,9 +15,9 @@ const __dirname = dirname(__filename);
 
 const app = express();
 app.use(express.static(path.join(__dirname, "client")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json());
 
 const PORT = process.env.SERVER_PORT;
 
