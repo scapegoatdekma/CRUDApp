@@ -1,0 +1,94 @@
+body {
+  position: relative;
+  overflow: hidden;
+}
+
+#starbg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.box-container {
+  position: absolute;
+  min-height: 100vh;
+  min-width: 100%;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 100%;
+  margin: 0 auto;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-container #reg-form {
+  max-width: 600px;
+  border-radius: 2.6rem;
+  background: var(--bottom-bg);
+  box-shadow: var(--box-shadow);
+  padding: 2rem 2rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.box-container #reg-form h2 {
+  text-align: center;
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+.box-container #reg-form .input-form {
+  margin-top: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+.box-container #reg-form .input-form label {
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+}
+.box-container #reg-form .input-form input {
+  background-color: rgba(17, 15, 27, 0.5058823529);
+  padding: 1.2rem 1.7rem;
+  font-size: 1.5rem;
+  border-radius: 1.2rem 2.2rem 2.2rem 1.2rem;
+  color: var(--text-color);
+}
+.box-container #reg-form .input-form input::-moz-placeholder {
+  color: var(--text-color);
+}
+.box-container #reg-form .input-form input::placeholder {
+  color: var(--text-color);
+}
+.box-container #reg-form .submit-form {
+  margin: 0 auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.box-container #reg-form .submit-form button {
+  background-color: rgba(17, 15, 27, 0.5058823529);
+  color: var(--text-color);
+  padding: 1rem 5rem;
+  font-size: 2.2rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+.box-container #reg-form .info {
+  width: 70%;
+  margin: 0 auto;
+  border-radius: 2.6rem 2.6rem 0 0;
+  display: inline;
+  background-color: rgba(17, 15, 27, 0.5058823529);
+}
+.box-container #reg-form .info p {
+  padding: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
+.box-container #reg-form .info p a {
+  margin-left: 0.2rem;
+  color: var(--text-color);
+  text-underline-offset: 0.2rem;
+  text-decoration: underline;
+}/*# sourceMappingURL=Reg.min.css.map */

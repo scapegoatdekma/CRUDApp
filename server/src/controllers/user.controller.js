@@ -76,7 +76,6 @@ router.post("/", async (req, res) => {
       avatar: avatarUrl,
     };
     const user = await userService.createUser(userData);
-    console.log("Данные пользователя:", user);
     res.status(201).json(user);
   } catch (error) {
     console.error(`Ошибка при создании пользователя: ${error}`);
@@ -97,6 +96,7 @@ router.get("/auth", async (req, res) => {
   try {
     const { username, password } = req.query;
 
+    console.log(req.query);
     if (!username || !password) {
       return res.status(400).json({ error: "Missing required fields." });
     }
@@ -105,7 +105,7 @@ router.get("/auth", async (req, res) => {
     res.status(201).json(user);
   } catch (error) {
     console.error(`Ошибка при авторизации пользователя: ${error}`);
-    res.status(500).json({ error: "Неверный логин или пароль" });
+    res.status(401).json({ error: error.message });
   }
 });
 

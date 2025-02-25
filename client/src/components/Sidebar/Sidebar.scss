@@ -1,0 +1,131 @@
+.sider {
+  display: flex;
+  flex-direction: column;
+  //   display: none;
+  overflow: hidden;
+  width: 0%;
+  min-height: 100vh;
+  background-color: var(--box-bg-color);
+  border-right: var(--box-border);
+
+  opacity: 0; /* Изначально невидимый */
+  transition: opacity 0.3s ease-in-out; /* Анимация прозрачности */
+  &.active {
+    // clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    opacity: 1;
+    width: 20%;
+    // display: flex;
+  }
+  .logo {
+    position: relative;
+    border-right: 1px solid #35353565;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6rem;
+    width: 100%;
+    background-color: #090b21;
+    gap: 0.7rem;
+    img {
+      width: 2rem;
+    }
+    i {
+      position: absolute;
+      right: 2rem;
+      display: none;
+    }
+    color: var(--text-color);
+    font-size: 2.5rem;
+    // text-transform: lowercase;
+    letter-spacing: 0.2rem;
+  }
+
+  .sider-user {
+    background-color: #090b21;
+
+    padding: 2rem 2rem;
+    display: flex;
+    gap: 2rem;
+    margin: 0 auto;
+    // margin-top: 2rem;
+    align-items: center;
+    justify-content: center;
+    .avatar {
+      aspect-ratio: 1;
+      height: 5rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .content {
+      font-size: 1.5rem;
+      .name {
+        font-weight: 700;
+        font-size: 1.7rem;
+      }
+      .user-name {
+      }
+      .online {
+        font-size: 1.5rem;
+        font-weight: 400;
+
+        margin-top: 1rem;
+        margin-left: 1rem;
+        text-transform: capitalize;
+        position: relative;
+        &::before {
+          content: "";
+          top: 20%;
+          transform: translateY(50%);
+          left: -1rem;
+          aspect-ratio: 1;
+          height: 0.6rem;
+          border-radius: 50%;
+          background-color: #00c803;
+          position: absolute;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1500px) {
+  .sider {
+    &.active {
+      width: 25%;
+    }
+  }
+}
+
+@media screen and (max-width: 1165px) {
+  .sider {
+    // position: sticky;
+    opacity: 1;
+    top: 0;
+    display: inline-block;
+    z-index: 100;
+    min-height: 0;
+    min-width: 100%;
+    max-height: 6rem;
+    &.active {
+      max-height: 100%;
+    }
+    .logo {
+      height: 6rem;
+
+      .brand {
+        i {
+          display: inline-block;
+        }
+      }
+    }
+    .sider_content {
+      //   display: none;
+      opacity: 0; /* Изначально невидимый */
+      transition: opacity 0.3s ease-in-out; /* Анимация прозрачности */
+      /* Другие стили (position, width, etc.) */
+      &.active {
+        // display: inline-block;
+        opacity: 1; /* Полностью видимый */
+      }
+    }
+  }
+}

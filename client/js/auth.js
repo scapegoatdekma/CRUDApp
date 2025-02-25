@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("avatar", user.avatar);
           console.log(user.avatar);
 
-          // window.location.href = "./home.html";
+          window.location.href = "./home.html";
         } else {
           // Пользователь не найден
           alert("Неверный логин или пароль!");

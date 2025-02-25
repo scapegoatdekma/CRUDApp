@@ -1,0 +1,21 @@
+.sider-menu {
+  border-top: 2px solid rgba(53, 53, 53, 0.3960784314);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+}
+.sider-menu .item {
+  width: 100%;
+  padding: 1.5rem 2.5rem;
+  border-top: var(--box-border);
+  border-bottom: var(--box-border);
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-color);
+}
+.sider-menu .item.active {
+  background: var(--menu-item-active);
+}/*# sourceMappingURL=SidebarMenu.min.css.map */

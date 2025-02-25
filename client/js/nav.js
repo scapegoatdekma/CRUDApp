@@ -10,6 +10,7 @@ const navController = () => {
   console.log(currentItem);
   currentItem.classList.add("active");
 };
+
 document.addEventListener("DOMContentLoaded", () => {
   navController();
 });

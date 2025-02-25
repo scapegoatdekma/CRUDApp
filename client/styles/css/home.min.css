@@ -74,12 +74,15 @@ address {
 /* Form */
 input,
 textarea,
-button,
-select {
+button {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
   background-color: transparent;
+}
+
+select {
+  pointer-events: auto;
 }
 
 input::-ms-clear {
@@ -457,4 +460,8 @@ body {
   .main .content .header {
     position: static;
   }
+}
+.mySelect {
+  z-index: 100;
+  position: relative;
 }/*# sourceMappingURL=home.min.css.map */

@@ -1,7 +1,6 @@
 import { config } from "./db.js";
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import { userRouter } from "./src/controllers/user.controller.js";
 import pkg from "pg";
 import path from "path";

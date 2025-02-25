@@ -73,12 +73,15 @@ address {
 /* Form */
 input,
 textarea,
-button,
-select {
+button {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
   background-color: transparent;
+}
+
+select {
+  pointer-events: auto;
 }
 
 input::-ms-clear {

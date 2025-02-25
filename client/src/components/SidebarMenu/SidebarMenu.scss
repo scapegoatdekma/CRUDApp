@@ -1,0 +1,26 @@
+.sider-menu {
+  border-top: 2px solid #35353565;
+  // margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  .item {
+    width: 100%;
+    padding: 1.5rem 2.5rem;
+    border-top: var(--box-border);
+    border-bottom: var(--box-border);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-color);
+    i {
+    }
+    li {
+    }
+    &.active {
+      background: var(--menu-item-active);
+    }
+  }
+}
