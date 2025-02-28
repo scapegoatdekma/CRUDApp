@@ -1,0 +1,232 @@
+/* Variables */
+$primary-color: #007bff;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$light-gray: #f3f3f3;
+$medium-gray: #eee;
+$dark-gray: #ddd;
+$text-color: #333;
+$secondary-text-color: #555;
+$disabled-opacity: 0.7;
+
+/* Mixins */
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+
+@mixin border-radius($radius: 4px) {
+  border-radius: $radius;
+}
+
+@mixin box-shadow($shadow: 0 0 5px rgba(0, 123, 255, 0.5)) {
+  box-shadow: $shadow;
+}
+
+/* Main Section */
+.ticket-create-section {
+  padding: 20px;
+  border: 1px solid $dark-gray;
+  @include border-radius(5px);
+  margin-bottom: 20px;
+}
+
+.ticket-create-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: $text-color;
+}
+
+/* Form Styling */
+.ticket-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: $secondary-text-color;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid $dark-gray;
+    @include border-radius();
+    box-sizing: border-box;
+    font-size: 16px;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      @include box-shadow();
+    }
+  }
+}
+
+.form-control-file {
+  margin-top: 5px;
+}
+
+/* Image Preview Container */
+.image-preview-container {
+  max-height: 400px;
+  overflow: scroll;
+  overflow-x: hidden;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-preview-item {
+  width: 100%;
+  margin: 5px;
+  padding: 10px;
+  border: 1px solid $medium-gray;
+  @include border-radius(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* Image Header and Info */
+.image-preview-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.image-preview-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+  @include border-radius();
+}
+
+.image-info {
+  flex-grow: 1;
+}
+
+.image-name {
+  font-size: 14px;
+  color: $text-color;
+  margin-bottom: 3px;
+}
+
+.image-size {
+  font-size: 12px;
+  color: lighten($secondary-text-color, 20%);
+}
+
+/* Upload Status */
+.upload-status {
+  font-size: 12px;
+
+  &.success {
+    color: green;
+  }
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  width: 100%;
+  background-color: $light-gray;
+  @include border-radius();
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: $success-color;
+  @include border-radius();
+  @include transition(width);
+}
+
+/* Actions Buttons */
+.image-preview-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+
+  .upload-btn,
+  .cancel-btn,
+  .remove-btn {
+    background-color: $primary-color;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    @include border-radius();
+    cursor: pointer;
+    font-size: 14px;
+    @include transition(background-color);
+
+    &:hover {
+      opacity: $disabled-opacity;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .cancel-btn,
+  .remove-btn {
+    background-color: $danger-color;
+    margin-left: 5px;
+  }
+}
+
+/* Submit Button */
+.submit-btn {
+  background-color: $success-color;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  @include border-radius();
+  cursor: pointer;
+  font-size: 16px;
+  @include transition(background-color);
+
+  &:hover {
+    //  Альтернатива, если проблемы с модулями
+    background-color: mix(
+      $success-color,
+      black,
+      10%
+    ); // Смешиваем с черным (10% черный, 90% исходный цвет)
+    // Или
+    // background-color: shade($success-color, 10%); // Аналог darken, но может быть менее предсказуем
+  }
+}
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .image-preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .image-preview-img {
+    margin-bottom: 10px;
+  }
+
+  .image-preview-actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    .upload-btn,
+    .cancel-btn,
+    .remove-btn {
+      margin-left: 0;
+      margin-bottom: 5px;
+    }
+  }
+}

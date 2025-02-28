@@ -6,6 +6,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import logout from "../../utils/auth"; // Импортируем функцию logout
 // Импортируем необходимые иконки из Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Header from "../../components/Header/Header";
 
 import {
   faTachometer,
@@ -56,43 +57,11 @@ function Home() {
       />
 
       <div className="content">
-        <header className="header">
-          <div className="flex">
-            <div className="left">
-              <FontAwesomeIcon
-                icon={faBars}
-                className="burger-menu"
-                id="toggle-sider"
-                onClick={toggleSider}
-              />
-            </div>
-
-            <div className="right">
-              <div className="icons">
-                <div className="icon-with-counter companyEl">
-                  <FontAwesomeIcon icon={faUsers} className="company" />
-                  <span className="counter">1</span>
-                </div>
-
-                <div className="icon-with-counter mailEl">
-                  <FontAwesomeIcon icon={faEnvelope} className="mail" />
-                  <span className="counter">1</span>
-                </div>
-              </div>
-
-              <div
-                className="user"
-                onClick={handleLogout}
-                style={{ cursor: "pointer" }}
-              >
-                {" "}
-                {/* Добавляем onClick и style */}
-                <FontAwesomeIcon icon={faUser} className="account" />
-                <span className="user_name">{username || "{your_name}"}</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <Header
+          username={username}
+          toggleSider={toggleSider}
+          handleLogout={handleLogout}
+        />
 
         <div className="dashboard">
           <section className="title-section">
