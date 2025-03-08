@@ -1,5 +1,5 @@
 // src/pages/Home/Home.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Home.scss";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -19,12 +19,12 @@ import {
   faUpload,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 function Home() {
-  const [username, setUsername] = useState("");
   const [isSiderActive, setIsSiderActive] = useState(true);
-  const [avatar, setAvatar] = useState("");
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -51,14 +51,11 @@ function Home() {
     <main className="main">
       <Sidebar
         isSiderActive={isSiderActive}
-        username={username}
-        avatar={avatar}
         toggleSider={toggleSider}
       />
 
       <div className="content">
         <Header
-          username={username}
           toggleSider={toggleSider}
           handleLogout={handleLogout}
         />

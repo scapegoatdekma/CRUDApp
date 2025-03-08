@@ -17,7 +17,9 @@ function Auth() {
     try {
       const user = await loginUser(username, password);
 
-      login(user.token, user.username, user.avatar);
+      console.log(user);
+
+      login(user.token, user);
       // console.table(user);
       navigate("/");
     } catch (error) {

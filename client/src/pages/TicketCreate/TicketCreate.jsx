@@ -7,7 +7,9 @@ import logout from "../../utils/auth"; // Импортируем функцию 
 // Импортируем необходимые иконки из Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Header from "../../components/Header/Header";
-import TicketCreateSection from "../../components/TicketCreateSection/TicketCreateSection";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
+import TicketForm from "../../components/TicketForm/TicketForm";
 
 import {
   faTachometer,
@@ -26,6 +28,8 @@ function TicketCreate() {
   const [isSiderActive, setIsSiderActive] = useState(true);
   const [avatar, setAvatar] = useState("");
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
@@ -37,7 +41,18 @@ function TicketCreate() {
     if (storedAvatar) {
       setAvatar(storedAvatar);
     }
+    
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      setIsLoading(false);
+    }
+  }, [currentUser]);
+
+  if (isLoading) {
+    return <div className="loading">Загрузка данных пользователя...</div>;
+  }
 
   const toggleSider = () => {
     setIsSiderActive(!isSiderActive);
@@ -63,7 +78,9 @@ function TicketCreate() {
           toggleSider={toggleSider}
           handleLogout={handleLogout}
         />
-        <TicketCreateSection />
+        <div className="form">
+        <TicketForm currentUser={currentUser} />
+        </div>
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Header.scss";
 import {
@@ -7,8 +7,12 @@ import {
   faEnvelope,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../../context/AuthContext/AuthContext";
 
-const Header = ({ username, toggleSider, handleLogout }) => {
+const Header = ({ toggleSider, handleLogout }) => {
+  
+  const { currentUser } = useContext(AuthContext);
+
   return (
     <header className="header">
       <div className="flex">
@@ -40,7 +44,7 @@ const Header = ({ username, toggleSider, handleLogout }) => {
             style={{ cursor: "pointer" }}
           >
             <FontAwesomeIcon icon={faUser} className="account" />
-            <span className="user_name">{username || "{your_name}"}</span>
+            <span className="user_name">{currentUser.username || "{your_name}"}</span>
           </div>
         </div>
       </div>

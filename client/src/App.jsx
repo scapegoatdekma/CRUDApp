@@ -7,6 +7,7 @@ import { AuthContext } from "./context/AuthContext/AuthContext";
 import TicketCreate from "./pages/TicketCreate/TicketCreate";
 
 function App() {
+  // const { token } = 1;
   const { token } = useContext(AuthContext);
 
   return (

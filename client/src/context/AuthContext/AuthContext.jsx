@@ -4,42 +4,59 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [username, setUsername] = useState(localStorage.getItem("username"));
-  const [avatar, setAvatar] = useState(localStorage.getItem("avatar"));
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem("currentUser");
+      return savedUser ? JSON.parse(savedUser) : {
+        username: 'Гость',
+        role: 'Не определено',
+        email: 'N/A',
+        login: 'dekmaOFF',
+        avatar: '/default-avatar.png'
+      };
+    } catch {
+      return {
+        username: 'Гость',
+        role: 'Не определено',
+        email: 'N/A',
+        login: 'dekmaOFF',
+        avatar: '/default-avatar.png'
+      };
+    }
+  });
 
+  // Имитация загрузки пользователя при монтировании
   useEffect(() => {
-    localStorage.setItem("token", token || "");
-    // console.log(token);
-  }, [token]);
+    if (!currentUser) {
+      setTimeout(() => {
+        setCurrentUser(mockUser);
+        localStorage.setItem("currentUser", JSON.stringify(mockUser));
+      }, 1000);
+    }
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem("username", username || "");
-    // console.log(username);
-  }, [username]);
-
-  useEffect(() => {
-    localStorage.setItem("avatar", avatar || "");
-    // console.log(avatar);
-  }, [avatar]);
-
-  const login = (newToken, username, avatar) => {
+  const login = (newToken, userData) => {
+    
     setToken(newToken);
-    setUsername(username);
-    setAvatar(avatar);
+    localStorage.setItem("currentUser", JSON.stringify(userData));
+    console.log(JSON.parse(localStorage.getItem("currentUser")));
+    setCurrentUser(userData);
+    localStorage.setItem("token", newToken);
   };
 
   const logout = () => {
     setToken(null);
-    setUsername(null);
-    setAvatar(null);
+    setCurrentUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUser");
   };
 
   const value = {
     token,
-    username,
-    avatar,
+    currentUser,
     login,
     logout,
+    updateUser: setCurrentUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

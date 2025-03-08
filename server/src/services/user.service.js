@@ -75,6 +75,8 @@ export class UserService {
         token: token,
         username: user.username,
         avatar: `http://localhost:4200${user.avatar}`,
+        role: user.role,
+        email: user.email,
       };
     } catch (error) {
       console.error("Ошибка при входе пользователя в UserService:", error);

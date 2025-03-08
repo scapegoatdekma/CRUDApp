@@ -83,6 +83,9 @@
         }
       }
     }
+    .form{
+      margin: 0 2rem;
+    }
     .dashboard {
       .title-section {
         padding: 0.8rem 3rem;
@@ -174,7 +177,12 @@
     }
   }
 }
-
+.loading {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-color);
+  font-size: 1.8rem;
+}
 @media screen and (max-width: 1165px) {
   .main {
     flex-direction: column;
