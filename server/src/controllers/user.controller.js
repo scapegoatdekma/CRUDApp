@@ -3,109 +3,184 @@ import { UserService } from "../services/user.service.js";
 import fileUpload from "express-fileupload";
 import path from "path";
 import { fileURLToPath } from "url";
+import { authMiddleware } from "../middleware/auth.middleware.js";
+import { pool } from "../../db.js";
+import rateLimit from "express-rate-limit";
+import { body, validationResult } from "express-validator";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = Router();
 const userService = new UserService();
 
-// Get __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Ограничение запросов для /auth
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: "Слишком много попыток входа. Попробуйте позже."
+});
 
+// Настройка загрузки файлов
 router.use(
   fileUpload({
     createParentPath: true,
-    limits: { fileSize: 25 * 1024 * 1024 }, // 25MB
+    limits: { fileSize: 25 * 1024 * 1024 },
     abortOnLimit: true,
     useTempFiles: true,
-    tempFileDir: "/tmp/",
+    tempFileDir: "/tmp/"
   })
 );
 
-router.post("/", async (req, res) => {
-  try {
+// Регистрация пользователя
+router.post(
+  "/",
+  [
+    body("username").notEmpty().withMessage("Имя пользователя обязательно"),
+    body("email").isEmail().withMessage("Некорректный формат email"),
+    body("password").isLength({ min: 8 }).withMessage("Пароль должен содержать минимум 8 символов")
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
     const { username, email, password } = req.body;
-    const avatar = req.files && req.files.avatar; // Обрабатываем отсутствие файла
+    const avatar = req.files?.avatar;
 
-    console.log("username:", username);
-    console.log("email:", email);
-    console.log("password:", password);
-    console.log("avatar:", avatar);
-
-    if (!username || !email || !password) {
-      return res.status(400).json({ error: "Missing required fields." });
-    }
-
-    const overlap = await userService.checkOverlap(req.body);
-
-    if (overlap) {
-      return res
-        .status(401)
-        .json({ error: "Пользователь с такой почтой уже существует" });
-    }
-    let avatarUrl = null;
-
-    if (req.files && req.files.avatar) {
-      const avatar = req.files.avatar;
-      const uploadDir = path.join(__dirname, "../../public/uploads");
-      const uniqueFilename =
-        Date.now() +
-        "-" +
-        Math.round(Math.random() * 1e9) +
-        path.extname(avatar.name);
-      const uploadPath = path.join(uploadDir, uniqueFilename);
-
-      const allowedMimes = ["image/jpeg", "image/png", "image/gif"];
-      if (!allowedMimes.includes(avatar.mimetype)) {
-        return res.status(400).json({
-          error:
-            "Недопустимый тип файла. Разрешены только форматы JPEG, PNG и GIF",
+    try {
+      // Проверка существования пользователя
+      const emailExists = await userService.checkEmailExists(email);
+      if (emailExists) {
+        return res.status(409).json({
+          success: false,
+          error: "Пользователь с таким email уже существует"
         });
       }
-      try {
+
+      // Обработка аватара
+      let avatarUrl = null;
+      if (avatar) {
+        const allowedMimes = ["image/jpeg", "image/png", "image/gif"];
+        if (!allowedMimes.includes(avatar.mimetype)) {
+          return res.status(400).json({
+            success: false,
+            error: "Разрешены только изображения в формате JPEG, PNG или GIF"
+          });
+        }
+
+        const uploadDir = path.join(__dirname, "../../public/uploads/avatars");
+        const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}${path.extname(avatar.name)}`;
+        const uploadPath = path.join(uploadDir, uniqueFilename);
+
         await avatar.mv(uploadPath);
-        avatarUrl = `/uploads/${uniqueFilename}`;
-      } catch (error) {
-        console.error("Ошибка при сохранении файла:", error);
+        avatarUrl = `/uploads/avatars/${uniqueFilename}`;
       }
+
+      // Создание пользователя
+      const newUser = await userService.createUser({
+        username,
+        email,
+        password,
+        avatar: avatarUrl
+      });
+
+      // Генерация токена
+      const token = userService.generateToken(newUser);
+
+      res.status(201).json({
+        success: true,
+        user: {
+          id: newUser.id,
+          username: newUser.username,
+          email: newUser.email,
+          avatar: `http://localhost:4200${newUser.avatar}`,
+          role: newUser.role
+        },
+        token
+      });
+    } catch (error) {
+      console.error("Ошибка регистрации:", error);
+      res.status(500).json({
+        success: false,
+        error: "Внутренняя ошибка сервера при регистрации"
+      });
+    }
+  }
+);
+
+// Аутентификация пользователя
+router.post("/auth", authLimiter, async (req, res) => {
+  const { email, password } = req.body;
+  console.log(req.body);
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      error: "Email и пароль обязательны для входа"
+    });
+  }
+
+  try {
+    const user = await userService.validateUser(email, password);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "Неверные учетные данные"
+      });
     }
 
-    const userData = {
-      username: username,
-      email: email,
-      password: password,
-      avatar: avatarUrl,
-    };
-    const user = await userService.createUser(userData);
-    res.status(201).json(user);
+    const token = userService.generateToken(user);
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        avatar: `http://localhost:4200${user.avatar}`,
+        role: user.role
+      },
+      token
+    });
   } catch (error) {
-    console.error(`Ошибка при создании пользователя: ${error}`);
-    res.status(500).json({ error: "Ошибка при создании пользователя" });
-  }
-});
-router.get("/", async (req, res) => {
-  try {
-    const user = await userService.getUser(req.query);
-    res.status(201).json(user);
-  } catch (error) {
-    console.error(`Ошибка получения меню: ${error}`);
-    res.status(401).json({ error: error });
+    console.error("Ошибка аутентификации:", error);
+    res.status(500).json({
+      success: false,
+      error: "Внутренняя ошибка сервера при аутентификации"
+    });
   }
 });
 
-router.get("/auth", async (req, res) => {
+// Получение информации о текущем пользователе
+router.get("/me", authMiddleware, async (req, res) => {
   try {
-    const { username, password } = req.query;
+    const { rows } = await pool.query(
+      "SELECT id, username, email, avatar, role FROM users WHERE id = $1",
+      [req.user.id]
+    );
 
-    console.log(req.query);
-    if (!username || !password) {
-      return res.status(400).json({ error: "Missing required fields." });
+    if (!rows.length) {
+      return res.status(404).json({
+        success: false,
+        error: "Пользователь с указанным ID не найден"
+      });
     }
 
-    const user = await userService.loginUser(username, password);
-    res.status(201).json(user);
+    const user = rows[0];
+    user.avatar = `http://localhost:4200${user.avatar}`;
+
+    res.json({
+      success: true,
+      user
+    });
   } catch (error) {
-    console.error(`Ошибка при авторизации пользователя: ${error}`);
-    res.status(401).json({ error: error.message });
+    console.error("Ошибка получения пользователя:", error);
+    res.status(500).json({
+      success: false,
+      error: "Ошибка при получении данных пользователя"
+    });
   }
 });
 

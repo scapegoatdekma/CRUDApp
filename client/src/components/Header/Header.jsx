@@ -44,7 +44,7 @@ const Header = ({ toggleSider, handleLogout }) => {
             style={{ cursor: "pointer" }}
           >
             <FontAwesomeIcon icon={faUser} className="account" />
-            <span className="user_name">{currentUser.username || "{your_name}"}</span>
+            <span className="user_name">{currentUser.user.username || "{your_name}"}</span>
           </div>
         </div>
       </div>

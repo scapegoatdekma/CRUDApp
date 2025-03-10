@@ -1,4 +1,6 @@
 import dotenv from "dotenv";
+import pkg from "pg";
+const { Pool } = pkg;
 
 dotenv.config();
 
@@ -9,3 +11,5 @@ export const config = {
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
 };
+
+export const pool = new Pool(config);

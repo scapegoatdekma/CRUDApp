@@ -178,8 +178,16 @@
         }
 
         .file-info {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
           flex-grow: 1;
           margin-right: 2.4rem;
+
+          img{
+            aspect-ratio: 1;
+            max-height: 40px;
+          }
 
           .file-name {
             color: var(--text-color);

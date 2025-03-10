@@ -10,7 +10,6 @@ import { AuthContext } from "../../context/AuthContext/AuthContext";
 function Sidebar({ isSiderActive }) {
 
   const { currentUser } = useContext(AuthContext);
-  
 
   return (
     <aside className={`sider ${isSiderActive ? "active" : ""}`} id="sider">
@@ -23,14 +22,14 @@ function Sidebar({ isSiderActive }) {
       <div className={`sider_content ${isSiderActive ? "active" : ""}`}>
         <div className="sider-user">
           <img
-            src={currentUser.avatar ? currentUser.avatar : emptyAvatar}
+            src={currentUser.user.avatar ? currentUser.user.avatar : emptyAvatar}
             className="avatar"
             alt="User Avatar"
           />
           <div className="content">
             <div className="name">
               Привет,{" "}
-              <span className="user_name">{currentUser.username || "user"}</span>
+              <span className="user_name">{currentUser.user.username || "user"}</span>
               <div className="online">online</div>
             </div>
           </div>

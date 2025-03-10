@@ -1,7 +1,7 @@
 // src/components/SidebarMenu/SidebarMenu.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./SidebarMenu.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTachometer,
@@ -17,48 +17,44 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function SidebarMenu() {
+  const location = useLocation();
+  const [activeItem, setActiveItem] = useState(location.pathname);
+
+  useEffect(() => {
+    setActiveItem(location.pathname);
+  }, [location.pathname]);
+
+  const handleItemClick = (path) => {
+    setActiveItem(path);
+  };
+
+  const menuItems = [
+    { path: "/", id: "home", icon: faTachometer, label: "Dashboard" },
+    { path: "/ticket_create", id: "ticket_create", icon: faTag, label: "Создать заявку" },
+    { path: "/news", id: "news", icon: faNewspaper, label: "Новости" },
+    { path: "/tickets", id: "tickets", icon: faListAlt, label: "Список заявок" },
+    { path: "/messages", id: "messages", icon: faMessage, label: "Сообщения" },
+    { path: "/staff", id: "staff", icon: faUsers, label: "Сотрудники" },
+    { path: "/faq", id: "faq", icon: faSitemap, label: "Центр знаний" },
+    { path: "/dictionary", id: "dictionary", icon: faBook, label: "Блокнот" },
+    { path: "/reports", id: "reports", icon: faBarChart, label: "Отчёты" },
+    { path: "/admin_panel", id: "admin_panel", icon: faShield, label: "Администрирование" },
+  ];
+
   return (
     <ul className="sider-menu">
-      <Link to="/" className="item" id="home">
-        <FontAwesomeIcon icon={faTachometer} />
-        <li>Dashboard</li>
-      </Link>
-      <Link to="/ticket_create" className="item" id="ticket_create">
-        <FontAwesomeIcon icon={faTag} />
-        <li>Создать заявку</li>
-      </Link>
-      <Link to="#" className="item" id="news">
-        <FontAwesomeIcon icon={faNewspaper} />
-        <li>Новости</li>
-      </Link>
-      <Link to="#" className="item" id="tickets">
-        <FontAwesomeIcon icon={faListAlt} />
-        <li>Список заявок</li>
-      </Link>
-      <Link to="#" className="item" id="messages">
-        <FontAwesomeIcon icon={faMessage} />
-        <li>Сообщения</li>
-      </Link>
-      <Link to="#" className="item" id="staff">
-        <FontAwesomeIcon icon={faUsers} />
-        <li>Сотрудники</li>
-      </Link>
-      <Link to="#" className="item" id="faq">
-        <FontAwesomeIcon icon={faSitemap} />
-        <li>Центр знаний</li>
-      </Link>
-      <Link to="#" className="item" id="dictionary">
-        <FontAwesomeIcon icon={faBook} />
-        <li>Блокнот</li>
-      </Link>
-      <Link to="#" className="item" id="reports">
-        <FontAwesomeIcon icon={faBarChart} />
-        <li>Отчёты</li>
-      </Link>
-      <Link to="#" className="item" id="admin_panel">
-        <FontAwesomeIcon icon={faShield} />
-        <li>Администрирование</li>
-      </Link>
+      {menuItems.map((item) => (
+        <Link
+          key={item.id} // Используем item.id в качестве key
+          to={item.path}
+          className={`item ${activeItem === item.path ? "active" : ""}`}
+          id={item.id}
+          onClick={() => handleItemClick(item.path)}
+        >
+          <FontAwesomeIcon icon={item.icon} />
+          <li>{item.label}</li>
+        </Link>
+      ))}
     </ul>
   );
 }

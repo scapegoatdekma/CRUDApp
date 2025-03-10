@@ -6,25 +6,23 @@ import { loginUser } from "../../api/auth";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
 
 function Auth() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
 
     try {
-      const user = await loginUser(username, password);
-
-      console.log(user);
-
+      const user = await loginUser(email, password);
       login(user.token, user);
-      // console.table(user);
       navigate("/");
     } catch (error) {
       console.error("Authentication failed:", error);
-      alert(error.message); // Отображаем сообщение об ошибке пользователю
+      setError(error.message);
     }
   };
 
@@ -34,15 +32,16 @@ function Auth() {
       <div className="box-container" id="content">
         <form onSubmit={handleSubmit} id="auth-form">
           <h2>Авторизация</h2>
+          {error && <div className="error-message">{error}</div>}
           <div className="input-form">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="username"
-              value={username}
-              placeholder="Ваш никнейм"
+              type="email"
+              id="email"
+              value={email}
+              placeholder="Ваш email"
               required
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="input-form">
@@ -59,7 +58,6 @@ function Auth() {
           <div className="submit-form">
             <button type="submit">Войти</button>
           </div>
-
           <span className="info">
             <p>
               Нет аккаунта? <Link to="/reg">Зарегистрироваться</Link>

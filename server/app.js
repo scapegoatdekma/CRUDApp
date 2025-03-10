@@ -2,6 +2,7 @@ import { config } from "./db.js";
 import express from "express";
 import cors from "cors";
 import { userRouter } from "./src/controllers/user.controller.js";
+import { ticketRouter } from "./src/controllers/ticket.controller.js";
 import pkg from "pg";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -24,6 +25,7 @@ const pool = new Pool(config);
 
 // app.use("api/auth");
 app.use("/api/users", userRouter);
+app.use("/api/tickets", ticketRouter);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на http://localhost:${PORT}/`);
