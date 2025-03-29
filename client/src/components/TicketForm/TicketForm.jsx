@@ -51,16 +51,38 @@ const TicketForm = () => {
   // Обработчик файлов
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const newPreviews = files.map(file => ({
+    
+    // Validate file types and sizes
+    const validFiles = files.filter(file => {
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf', 
+                         'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const maxSize = 25 * 1024 * 1024; // 25MB
+      
+      if (!validTypes.includes(file.type)) {
+        setErrors(prev => ({...prev, files: 'Недопустимый тип файла'}));
+        return false;
+      }
+      
+      if (file.size > maxSize) {
+        setErrors(prev => ({...prev, files: 'Файл слишком большой (макс. 25MB)'}));
+        return false;
+      }
+      
+      return true;
+    });
+  
+    if (validFiles.length === 0) return;
+  
+    const newPreviews = validFiles.map(file => ({
       id: URL.createObjectURL(file),
       name: file.name,
       type: file.type.startsWith('image/') ? 'image' : 'file',
       size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
       file
     }));
+    
     setPreviews([...previews, ...newPreviews]);
   };
-
   // Удаление файла
   const removeFile = (id) => {
     setPreviews(previews.filter(file => file.id !== id));
@@ -76,35 +98,50 @@ const TicketForm = () => {
     
     try {
       const formPayload = new FormData();
-      console.log(currentUser);
+      
+      // Add all form fields
       formPayload.append('title', formData.title);
       formPayload.append('description', formData.description);
       formPayload.append('priority', PRIORITY_MAP[formData.priority]);
       formPayload.append('category', formData.category);
       formPayload.append('creator_name', currentUser.username);
       formPayload.append('client_id', currentUser.user.id);
-
-      // Добавление файлов
-      previews.forEach((file, index) => {
-        formPayload.append(`attachments[${index}]`, file.file);
-      });
-
+  
+      // Add files if they exist
+      if (previews.length > 0) {
+        previews.forEach((file) => {
+          formPayload.append('attachments', file.file, file.file.name);
+        });
+      }
+  
       const response = await axios.post('http://localhost:4200/api/tickets', formPayload, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        transformRequest: (data) => data, // Important for FormData
       });
-
-      if(response.data.success) {
+  
+      if(response.data) {
         setSubmitSuccess(true);
         resetForm();
         setTimeout(() => setSubmitSuccess(false), 5000);
       }
     } catch (error) {
       console.error('Ошибка создания тикета:', error);
+      let errorMessage = 'Ошибка при создании тикета';
+      
+      if (error.response) {
+        // Try to get server error message
+        if (error.response.data && typeof error.response.data === 'object') {
+          errorMessage = error.response.data.message || error.response.data.error || errorMessage;
+        } else if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        }
+      }
+      
       setErrors({
-        submit: error.response?.data?.message || 'Ошибка при создании тикета'
+        submit: errorMessage
       });
     } finally {
       setIsSubmitting(false);

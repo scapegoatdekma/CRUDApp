@@ -28,13 +28,14 @@ export class UserService {
         userData.avatar || '/default-avatar.png'
       ]
     );
+    console.log(rows);
     
     return rows[0];
   }
 
   async validateUser(email, password) {
     const { rows } = await pool.query(
-      'SELECT id, username, password, role, avatar FROM users WHERE email = $1',
+      'SELECT id, username, password, role, avatar, email FROM users WHERE email = $1',
       [email]
     );
 

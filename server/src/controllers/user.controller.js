@@ -21,33 +21,28 @@ const authLimiter = rateLimit({
   message: "Слишком много попыток входа. Попробуйте позже."
 });
 
-// Настройка загрузки файлов
-router.use(
-  fileUpload({
-    createParentPath: true,
-    limits: { fileSize: 25 * 1024 * 1024 },
-    abortOnLimit: true,
-    useTempFiles: true,
-    tempFileDir: "/tmp/"
-  })
-);
-
 // Регистрация пользователя
 router.post(
   "/",
-  [
-    body("username").notEmpty().withMessage("Имя пользователя обязательно"),
-    body("email").isEmail().withMessage("Некорректный формат email"),
-    body("password").isLength({ min: 8 }).withMessage("Пароль должен содержать минимум 8 символов")
-  ],
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
-    }
-
     const { username, email, password } = req.body;
+    console.log(username, email, password);
     const avatar = req.files?.avatar;
+
+    // Валидация вручную
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        errors: [
+          { path: "username", msg: "Имя пользователя обязательно" },
+          { path: "email", msg: "Некорректный формат email" },
+          { path: "password", msg: "Пароль должен содержать минимум 8 символов" },
+        ],
+      });
+    }
+    else {
+      console.log("DATA:", username, email, password);
+    }
 
     try {
       // Проверка существования пользователя
@@ -62,7 +57,7 @@ router.post(
       // Обработка аватара
       let avatarUrl = null;
       if (avatar) {
-        const allowedMimes = ["image/jpeg", "image/png", "image/gif"];
+        const allowedMimes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
         if (!allowedMimes.includes(avatar.mimetype)) {
           return res.status(400).json({
             success: false,
@@ -104,7 +99,7 @@ router.post(
       console.error("Ошибка регистрации:", error);
       res.status(500).json({
         success: false,
-        error: "Внутренняя ошибка сервера при регистрации"
+        error: "Внутренняя ошибка сервера при регистрации",
       });
     }
   }

@@ -14,26 +14,42 @@ import {
   faBook,
   faBarChart,
   faShield,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 function SidebarMenu() {
   const location = useLocation();
   const [activeItem, setActiveItem] = useState(location.pathname);
+  const [isTicketsOpen, setIsTicketsOpen] = useState(false);
 
   useEffect(() => {
     setActiveItem(location.pathname);
+    // Автоматически открываем меню если находимся на связанной странице
+    if (["/tickets", "/ticket_create"].includes(location.pathname)) {
+      setIsTicketsOpen(true);
+    }
   }, [location.pathname]);
 
-  const handleItemClick = (path) => {
-    setActiveItem(path);
+  const handleTicketsHover = (isOpen) => {
+    if (window.innerWidth > 768) { // Только для десктопной версии
+      setIsTicketsOpen(isOpen);
+    }
   };
 
   const menuItems = [
     { path: "/", id: "home", icon: faTachometer, label: "Dashboard" },
-    { path: "/ticket_create", id: "ticket_create", icon: faTag, label: "Создать заявку" },
+    { 
+      id: "tickets",
+      icon: faListAlt,
+      label: "Заявки",
+      subItems: [
+        { path: "/tickets", id: "ticket_list", label: "Список заявок" },
+        { path: "/ticket_create", id: "ticket_create", label: "Создать заявку" },
+      ]
+    },
     { path: "/news", id: "news", icon: faNewspaper, label: "Новости" },
-    { path: "/tickets", id: "tickets", icon: faListAlt, label: "Список заявок" },
-    { path: "/messages", id: "messages", icon: faMessage, label: "Сообщения" },
+    { path: "/chat", id: "messages", icon: faMessage, label: "Сообщения" },
     { path: "/staff", id: "staff", icon: faUsers, label: "Сотрудники" },
     { path: "/faq", id: "faq", icon: faSitemap, label: "Центр знаний" },
     { path: "/dictionary", id: "dictionary", icon: faBook, label: "Блокнот" },
@@ -43,18 +59,61 @@ function SidebarMenu() {
 
   return (
     <ul className="sider-menu">
-      {menuItems.map((item) => (
-        <Link
-          key={item.id} // Используем item.id в качестве key
-          to={item.path}
-          className={`item ${activeItem === item.path ? "active" : ""}`}
-          id={item.id}
-          onClick={() => handleItemClick(item.path)}
-        >
-          <FontAwesomeIcon icon={item.icon} />
-          <li>{item.label}</li>
-        </Link>
-      ))}
+      {menuItems.map((item) => {
+        if (item.subItems) {
+          return (
+            <li 
+              key={item.id}
+              className={`dropdown-container ${isTicketsOpen ? "open" : ""}`}
+              onMouseEnter={() => handleTicketsHover(true)}
+              onMouseLeave={() => handleTicketsHover(false)}
+            >
+              <div 
+                className={`dropdown-header ${
+                  item.subItems.some(sub => sub.path === activeItem) ? "active" : ""
+                }`}
+                onClick={() => setIsTicketsOpen(!isTicketsOpen)}
+              >
+                <FontAwesomeIcon icon={item.icon} />
+                <span>{item.label}</span>
+                <FontAwesomeIcon 
+                  icon={isTicketsOpen ? faChevronUp : faChevronDown} 
+                  className="dropdown-arrow"
+                />
+              </div>
+              
+              {isTicketsOpen && (
+                <ul className="dropdown-menu">
+                  {item.subItems.map((subItem) => (
+                    <Link
+                      key={subItem.id}
+                      to={subItem.path}
+                      className={`dropdown-item ${
+                        activeItem === subItem.path ? "active" : ""
+                      }`}
+                      onClick={() => setActiveItem(subItem.path)}
+                    >
+                      <li>{subItem.label}</li>
+                    </Link>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        }
+        
+        return (
+          <Link
+            key={item.id}
+            to={item.path}
+            className={`item ${activeItem === item.path ? "active" : ""}`}
+            onClick={() => setActiveItem(item.path)}
+          >
+            <FontAwesomeIcon icon={item.icon} />
+            <li>{item.label}</li>
+          </Link>
+        );
+      })}
     </ul>
   );
 }

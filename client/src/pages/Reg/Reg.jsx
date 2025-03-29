@@ -23,6 +23,9 @@ function Reg() {
       formData.append("avatar", avatar); // Добавляем файл аватара
     }
 
+    for (const [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
     try {
       const newUser = await registerUser(formData); // Отправляем запрос на сервер
       console.log("Пользователь успешно зарегистрирован:", newUser);

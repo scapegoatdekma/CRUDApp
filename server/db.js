@@ -10,6 +10,13 @@ export const config = {
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT,
+  // ssl: {
+  //   rejectUnauthorized: false // Отключает проверку сертификата (не для продакшена!)
+  //   // Для продакшена используйте:
+  //   // ca: fs.readFileSync('/path/to/server-ca.pem').toString(),
+  //   // cert: fs.readFileSync('/path/to/client-cert.pem').toString(),
+  //   // key: fs.readFileSync('/path/to/client-key.pem').toString(),
+  // },
 };
 
 export const pool = new Pool(config);

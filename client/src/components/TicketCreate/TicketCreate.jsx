@@ -2,14 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./TicketCreate.scss";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 import logout from "../../utils/auth"; // Импортируем функцию logout
 // Импортируем необходимые иконки из Font Awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Header from "../../components/Header/Header";
+import Header from "../Header/Header";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
-import TicketForm from "../../components/TicketForm/TicketForm";
+import TicketForm from "../TicketForm/TicketForm";
 
 import {
   faTachometer,
@@ -22,6 +22,7 @@ import {
   faUpload,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import Layout from "../../Layout/Layout";
 
 function TicketCreate() {
   const [username, setUsername] = useState("");
@@ -64,25 +65,9 @@ function TicketCreate() {
   };
 
   return (
-    <main className="main">
-      <Sidebar
-        isSiderActive={isSiderActive}
-        username={username}
-        avatar={avatar}
-        toggleSider={toggleSider}
-      />
-
-      <div className="content">
-        <Header
-          username={username}
-          toggleSider={toggleSider}
-          handleLogout={handleLogout}
-        />
-        <div className="form">
-        <TicketForm currentUser={currentUser} />
-        </div>
-      </div>
-    </main>
+    <Layout isSiderActive={isSiderActive} toggleSider={toggleSider} handleLogout={handleLogout}>
+      <TicketForm></TicketForm>
+    </Layout>
   );
 }
 

@@ -1,17 +1,8 @@
 import axios from "axios";
 
-export const registerUser = async (userData) => {
+export const registerUser = async (formData) => {
   try {
     const API_URL = "http://localhost:4200/api/users";
-    const formData = new FormData();
-
-    for (const key in userData) {
-      if (userData[key] instanceof File) {
-        formData.append(key, userData[key], userData[key].name);
-      } else {
-        formData.append(key, userData[key]);
-      }
-    }
 
     const response = await axios.post(API_URL, formData, {
       headers: {
@@ -24,7 +15,6 @@ export const registerUser = async (userData) => {
     throw error;
   }
 };
-
 
 export const loginUser = async (email, password) => {
   try {
@@ -39,6 +29,7 @@ export const loginUser = async (email, password) => {
         },
       }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     if (error.response) {

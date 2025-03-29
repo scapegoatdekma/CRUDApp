@@ -20,6 +20,7 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
+import Layout from "../../Layout/Layout";
 
 function Home() {
   const [isSiderActive, setIsSiderActive] = useState(true);
@@ -48,18 +49,7 @@ function Home() {
   };
 
   return (
-    <main className="main">
-      <Sidebar
-        isSiderActive={isSiderActive}
-        toggleSider={toggleSider}
-      />
-
-      <div className="content">
-        <Header
-          toggleSider={toggleSider}
-          handleLogout={handleLogout}
-        />
-
+    <Layout isSiderActive={isSiderActive} toggleSider={toggleSider} handleLogout={handleLogout}>
         <div className="dashboard">
           <section className="title-section">
             <div className="title">
@@ -112,8 +102,8 @@ function Home() {
             </div>
           </section>
         </div>
-      </div>
-    </main>
+    </Layout>
+    
   );
 }
 

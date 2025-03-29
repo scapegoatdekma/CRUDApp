@@ -37,13 +37,14 @@
         .icon-with-counter {
           position: relative;
           display: flex;
+          color: #fff;
         }
 
         .counter {
           position: absolute;
           font-size: 1rem;
           border-radius: 50%;
-          height: 2rem;
+          height: 12rem;
           min-width: 2rem;
           display: flex;
           justify-content: center;
@@ -52,8 +53,8 @@
           top: -1.5rem;
           right: -1.5rem;
           white-space: nowrap;
+      
         }
-
         .companyEl .counter {
           background-color: rgb(243, 78, 78);
         }

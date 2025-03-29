@@ -1,11 +1,13 @@
 .sider-menu {
   border-top: 2px solid #35353565;
-  // margin-top: 4rem;
   display: flex;
   justify-content: center;
   align-items: start;
   flex-direction: column;
-  .item {
+  width: 100%;
+
+  // Общие стили для всех пунктов меню
+  .item, .dropdown-header {
     width: 100%;
     padding: 1.5rem 2.5rem;
     border-top: var(--box-border);
@@ -15,12 +17,76 @@
     align-items: center;
     gap: 1rem;
     color: var(--text-color);
-    i {
-    }
-    li {
-    }
+    transition: background 0.3s ease;
+    
     &.active {
       background: var(--menu-item-active);
+    }
+    
+    &:hover:not(.active) {
+      background: rgba(0, 0, 0, 0.334);
+    }
+  }
+
+  // Стили для выпадающего меню
+  .dropdown-container {
+    width: 100%;
+    position: relative;
+    
+    .dropdown-header {
+      cursor: pointer;
+      position: relative;
+      justify-content: space-between;
+      
+      .dropdown-arrow {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+    }
+    
+    .dropdown-menu {
+      width: 100%;
+      background: var(--menu-item-active);
+      
+      .dropdown-item {
+        padding: 1.2rem 3.5rem;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        color: var(--text-color);
+        
+        &.active {
+          background: rgba(255, 255, 255, 0.1);
+        }
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.07);
+        }
+      }
+    }
+    
+    &.open {
+      .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  // Адаптация для мобильных устройств
+  @media (max-width: 768px) {
+    .dropdown-menu {
+      position: static !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      
+      .dropdown-item {
+        padding-left: 4.5rem !important;
+      }
+    }
+    
+    .dropdown-header {
+      padding: 1.5rem 2.5rem !important;
     }
   }
 }

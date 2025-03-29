@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
   });
-
+  
   // Имитация загрузки пользователя при монтировании
   useEffect(() => {
     if (!currentUser) {

@@ -8,6 +8,7 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../context/AuthContext/AuthContext";
+import { Link } from "react-router-dom";
 
 const Header = ({ toggleSider, handleLogout }) => {
   
@@ -27,15 +28,15 @@ const Header = ({ toggleSider, handleLogout }) => {
 
         <div className="right">
           <div className="icons">
-            <div className="icon-with-counter companyEl">
+            <Link to="#" className="icon-with-counter companyEl">
               <FontAwesomeIcon icon={faUsers} className="company" />
               <span className="counter">1</span>
-            </div>
+            </Link>
 
-            <div className="icon-with-counter mailEl">
+            <Link to="/chat" className="icon-with-counter mailEl">
               <FontAwesomeIcon icon={faEnvelope} className="mail" />
               <span className="counter">1</span>
-            </div>
+            </Link>
           </div>
 
           <div
