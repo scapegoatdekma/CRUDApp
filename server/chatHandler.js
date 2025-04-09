@@ -96,35 +96,29 @@ export const setupChat = (httpServer) => {
     // Обработка удаления сообщения
     socket.on('delete_message', async (data) => {
       try {
-        console.log('Удаление сообщения:', {
+        console.log('Попытка удаления:', { 
           messageId: data.messageId,
-          userId: data.userId,
-          isAdmin: data.isAdmin
+          userId: data.userId
         });
-
-        const result = await deleteMessage(
-          data.messageId,
-          data.userId,
-          data.isAdmin
-        );
-        
+    
+        const isAdmin = data.role === 'admin'; // Добавляем проверку роли
+        const result = await deleteMessage(data.messageId, data.userId, isAdmin);
+    
         if (result) {
-          io.emit('message_deleted', {
-            id: data.messageId,
-            deletedAt: new Date().toISOString()
-          });
+          console.log('Успешное удаление:', data.messageId);
+          io.emit('message_deleted', { id: data.messageId }); // Упрощенный формат
         } else {
+          console.warn('Отказ в удалении:', data.messageId);
           socket.emit('messages_error', {
             type: 'DELETE_MESSAGE_ERROR',
-            message: 'Сообщение не найдено или нет прав для удаления'
+            message: 'Нет прав для удаления'
           });
         }
       } catch (error) {
-        console.error('Ошибка при удалении сообщения:', error);
+        console.error('Ошибка удаления:', error);
         socket.emit('messages_error', {
           type: 'DELETE_MESSAGE_ERROR',
-          message: 'Не удалось удалить сообщение',
-          details: error.message
+          message: 'Ошибка сервера'
         });
       }
     });

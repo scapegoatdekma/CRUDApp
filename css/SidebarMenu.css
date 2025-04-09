@@ -1,0 +1,73 @@
+.sider-menu {
+  border-top: 2px solid rgba(53, 53, 53, 0.3960784314);
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 100%;
+}
+.sider-menu .item, .sider-menu .dropdown-header {
+  width: 100%;
+  padding: 1.5rem 2.5rem;
+  border-top: var(--box-border);
+  border-bottom: var(--box-border);
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-color);
+  transition: background 0.3s ease;
+}
+.sider-menu .item.active, .sider-menu .dropdown-header.active {
+  background: var(--menu-item-active);
+}
+.sider-menu .item:hover:not(.active), .sider-menu .dropdown-header:hover:not(.active) {
+  background: rgba(0, 0, 0, 0.334);
+}
+.sider-menu .dropdown-container {
+  width: 100%;
+  position: relative;
+}
+.sider-menu .dropdown-container .dropdown-header {
+  cursor: pointer;
+  position: relative;
+  justify-content: space-between;
+}
+.sider-menu .dropdown-container .dropdown-header .dropdown-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+.sider-menu .dropdown-container .dropdown-menu {
+  width: 100%;
+  background: var(--menu-item-active);
+}
+.sider-menu .dropdown-container .dropdown-menu .dropdown-item {
+  padding: 1.2rem 3.5rem;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-color);
+}
+.sider-menu .dropdown-container .dropdown-menu .dropdown-item.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sider-menu .dropdown-container .dropdown-menu .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.sider-menu .dropdown-container.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+@media (max-width: 768px) {
+  .sider-menu .dropdown-menu {
+    position: static !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  .sider-menu .dropdown-menu .dropdown-item {
+    padding-left: 4.5rem !important;
+  }
+  .sider-menu .dropdown-header {
+    padding: 1.5rem 2.5rem !important;
+  }
+}/*# sourceMappingURL=SidebarMenu.css.map */

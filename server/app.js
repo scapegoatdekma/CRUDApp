@@ -10,6 +10,9 @@ import { dirname } from "path";
 import { createServer } from 'http';
 import { setupChat } from './chatHandler.js'; // Импортируем модуль чата
 import fileUpload from 'express-fileupload'; // Добавляем express-fileupload
+import { messageRouter } from "./src/controllers/message.controller.js";
+
+console.log()
 
 const { Pool } = pkg;
 
@@ -26,7 +29,7 @@ app.use(cors());
 app.use(express.json()); // ДО fileUpload
 app.use(express.urlencoded({ extended: true })); // ДО fileUpload
 app.use(fileUpload({
-  createParentPath: true,
+  createParentPath: true, 
   limits: { 
     fileSize: 25 * 1024 * 1024, // 25MB
     files: 5 // Макс. 5 файлов
@@ -46,6 +49,7 @@ const pool = new Pool(config);
 app.use("/api/users", userRouter);
 // app.use("/api/users", userRouter);
 app.use("/api/tickets", ticketRouter);
+app.use("/api/messages", messageRouter);
 
 // Настройка WebSocket для чата
 setupChat(httpServer); // Инициализируем чат

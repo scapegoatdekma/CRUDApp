@@ -1,0 +1,138 @@
+@charset "UTF-8";
+.sider {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 0%;
+  min-height: 100vh;
+  background-color: var(--box-bg-color);
+  border-right: var(--box-border);
+  border-left: var(--box-border);
+  opacity: 0; /* Изначально невидимый */
+  transition: opacity 0.3s ease-in-out; /* Анимация прозрачности */
+}
+.sider.active {
+  opacity: 1;
+  width: 20%;
+}
+.sider .profile-link {
+  color: rgb(231, 231, 231);
+}
+.sider .logo {
+  position: relative;
+  border-right: 1px solid rgba(53, 53, 53, 0.3960784314);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 6rem;
+  width: 100%;
+  background-color: #090b21;
+  gap: 0.7rem;
+  color: var(--text-color);
+  font-size: 2.5rem;
+  letter-spacing: 0.2rem;
+}
+.sider .logo img {
+  width: 2rem;
+}
+.sider .logo i {
+  position: absolute;
+  right: 2rem;
+  display: none;
+}
+.sider .sider-user {
+  background-color: #090b21;
+  padding: 2rem 2rem;
+  display: flex;
+  gap: 2rem;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #090b21;
+  overflow: hidden;
+}
+.sider .sider-user::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.6) 0, rgba(10, 6, 34, 0.6) calc(var(--gradient-offset) + 40%), var(--primary) calc(var(--gradient-offset) + 80%), #fff calc(var(--gradient-offset) + 120%));
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 0;
+}
+.sider .sider-user:hover::before {
+  opacity: 1;
+}
+.sider .sider-user .avatar {
+  z-index: 2;
+  aspect-ratio: 1;
+  height: 5rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 50%;
+}
+.sider .sider-user .content {
+  z-index: 2;
+  font-size: 1.5rem;
+}
+.sider .sider-user .content .name {
+  font-weight: 700;
+  font-size: 1.7rem;
+}
+.sider .sider-user .content .online {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  text-transform: capitalize;
+  position: relative;
+}
+.sider .sider-user .content .online::before {
+  content: "";
+  top: 20%;
+  transform: translateY(50%);
+  left: -1rem;
+  aspect-ratio: 1;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: #00c803;
+  position: absolute;
+}
+
+@media screen and (max-width: 1500px) {
+  .sider.active {
+    width: 25%;
+  }
+}
+@media screen and (max-width: 1165px) {
+  .sider {
+    opacity: 1;
+    top: 0;
+    display: inline-block;
+    z-index: 100;
+    min-height: 0;
+    min-width: 100%;
+    max-height: 6rem;
+  }
+  .sider.active {
+    max-height: 100%;
+  }
+  .sider .logo {
+    height: 6rem;
+  }
+  .sider .logo .brand i {
+    display: inline-block;
+  }
+  .sider .sider_content {
+    opacity: 0; /* Изначально невидимый */
+    transition: opacity 0.3s ease-in-out; /* Анимация прозрачности */
+    /* Другие стили (position, width, etc.) */
+  }
+  .sider .sider_content.active {
+    opacity: 1; /* Полностью видимый */
+  }
+}/*# sourceMappingURL=Sidebar.css.map */

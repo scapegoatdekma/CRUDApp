@@ -1,0 +1,348 @@
+@charset "UTF-8";
+.ticket-page, .ticket-details, .ticket-edit {
+  padding: 2rem;
+  max-width: 120rem;
+  margin: 0 auto;
+  font-size: 1.6rem;
+  color: var(--text-color);
+}
+.ticket-page .page-header, .ticket-details .page-header, .ticket-edit .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.ticket-page .page-header h1, .ticket-details .page-header h1, .ticket-edit .page-header h1 {
+  font-size: 2.4rem;
+  margin: 0;
+}
+.ticket-page .page-header .controls, .ticket-details .page-header .controls, .ticket-edit .page-header .controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.ticket-page .create-button, .ticket-page .back-button, .ticket-page .edit-button, .ticket-page .delete-button, .ticket-page .save-button, .ticket-details .create-button, .ticket-details .back-button, .ticket-details .edit-button, .ticket-details .delete-button, .ticket-details .save-button, .ticket-edit .create-button, .ticket-edit .back-button, .ticket-edit .edit-button, .ticket-edit .delete-button, .ticket-edit .save-button {
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ticket-page .create-button:hover, .ticket-page .back-button:hover, .ticket-page .edit-button:hover, .ticket-page .delete-button:hover, .ticket-page .save-button:hover, .ticket-details .create-button:hover, .ticket-details .back-button:hover, .ticket-details .edit-button:hover, .ticket-details .delete-button:hover, .ticket-details .save-button:hover, .ticket-edit .create-button:hover, .ticket-edit .back-button:hover, .ticket-edit .edit-button:hover, .ticket-edit .delete-button:hover, .ticket-edit .save-button:hover {
+  opacity: 0.9;
+  transform: translateY(-0.1rem);
+}
+.ticket-page .create-button, .ticket-page .save-button, .ticket-details .create-button, .ticket-details .save-button, .ticket-edit .create-button, .ticket-edit .save-button {
+  background: var(--primary);
+  color: white;
+}
+.ticket-page .back-button, .ticket-details .back-button, .ticket-edit .back-button {
+  background: var(--gray-color);
+  color: white;
+}
+.ticket-page .edit-button, .ticket-details .edit-button, .ticket-edit .edit-button {
+  background: var(--primary);
+  color: white;
+}
+.ticket-page .delete-button, .ticket-details .delete-button, .ticket-edit .delete-button {
+  background: #ff4444;
+  color: white;
+}
+.ticket-page .status-badge, .ticket-page .priority-badge, .ticket-details .status-badge, .ticket-details .priority-badge, .ticket-edit .status-badge, .ticket-edit .priority-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: white;
+}
+.ticket-page .tickets-table, .ticket-details .tickets-table, .ticket-edit .tickets-table {
+  background: var(--box-bg-color);
+  border: var(--box-border);
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+}
+.ticket-page .tickets-table table, .ticket-details .tickets-table table, .ticket-edit .tickets-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ticket-page .tickets-table table th, .ticket-page .tickets-table table td, .ticket-details .tickets-table table th, .ticket-details .tickets-table table td, .ticket-edit .tickets-table table th, .ticket-edit .tickets-table table td {
+  padding: 1.2rem;
+  text-align: left;
+  border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
+}
+.ticket-page .tickets-table table th, .ticket-details .tickets-table table th, .ticket-edit .tickets-table table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+}
+.ticket-page .tickets-table table tr:hover, .ticket-details .tickets-table table tr:hover, .ticket-edit .tickets-table table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.ticket-page .tickets-table table .ticket-link, .ticket-details .tickets-table table .ticket-link, .ticket-edit .tickets-table table .ticket-link {
+  color: var(--primary);
+  text-decoration: none;
+}
+.ticket-page .tickets-table table .ticket-link:hover, .ticket-details .tickets-table table .ticket-link:hover, .ticket-edit .tickets-table table .ticket-link:hover {
+  text-decoration: underline;
+}
+.ticket-page .tickets-table table .actions, .ticket-details .tickets-table table .actions, .ticket-edit .tickets-table table .actions {
+  display: flex;
+  gap: 0.8rem;
+}
+.ticket-page .tickets-table table .actions button, .ticket-details .tickets-table table .actions button, .ticket-edit .tickets-table table .actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  transition: background 0.2s;
+}
+.ticket-page .tickets-table table .actions button:hover, .ticket-details .tickets-table table .actions button:hover, .ticket-edit .tickets-table table .actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.ticket-page .ticket-content, .ticket-details .ticket-content, .ticket-edit .ticket-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media (max-width: 768px) {
+  .ticket-page .ticket-content, .ticket-details .ticket-content, .ticket-edit .ticket-content {
+    grid-template-columns: 1fr;
+  }
+}
+.ticket-page .ticket-content .main-info, .ticket-page .ticket-content .additional-info > div, .ticket-details .ticket-content .main-info, .ticket-details .ticket-content .additional-info > div, .ticket-edit .ticket-content .main-info, .ticket-edit .ticket-content .additional-info > div {
+  background: var(--box-bg-color);
+  border: var(--box-border);
+  border-radius: 0.8rem;
+  padding: 2rem;
+  box-shadow: var(--box-shadow);
+}
+.ticket-page .ticket-content .main-info h2, .ticket-details .ticket-content .main-info h2, .ticket-edit .ticket-content .main-info h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+.ticket-page .ticket-content .main-info .description, .ticket-details .ticket-content .main-info .description, .ticket-edit .ticket-content .main-info .description {
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  white-space: pre-wrap;
+}
+.ticket-page .ticket-content .main-info .meta-info, .ticket-details .ticket-content .main-info .meta-info, .ticket-edit .ticket-content .main-info .meta-info {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.ticket-page .ticket-content .main-info .meta-info > div span:first-child, .ticket-details .ticket-content .main-info .meta-info > div span:first-child, .ticket-edit .ticket-content .main-info .meta-info > div span:first-child {
+  display: block;
+  color: var(--gray-color);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+.ticket-page .ticket-content .additional-info, .ticket-details .ticket-content .additional-info, .ticket-edit .ticket-content .additional-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.ticket-page .ticket-content .additional-info h3, .ticket-details .ticket-content .additional-info h3, .ticket-edit .ticket-content .additional-info h3 {
+  font-size: 1.6rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+.ticket-page .ticket-content .additional-info p, .ticket-details .ticket-content .additional-info p, .ticket-edit .ticket-content .additional-info p {
+  margin: 0.8rem 0;
+  display: flex;
+}
+.ticket-page .ticket-content .additional-info p span:first-child, .ticket-details .ticket-content .additional-info p span:first-child, .ticket-edit .ticket-content .additional-info p span:first-child {
+  color: var(--gray-color);
+  min-width: 12rem;
+  display: inline-block;
+}
+.ticket-page .attachments, .ticket-details .attachments, .ticket-edit .attachments {
+  margin-top: 3rem;
+}
+.ticket-page .attachments h3, .ticket-details .attachments h3, .ticket-edit .attachments h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+.ticket-page .attachments .files-grid, .ticket-details .attachments .files-grid, .ticket-edit .attachments .files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1.5rem;
+}
+.ticket-page .attachments .file-item, .ticket-details .attachments .file-item, .ticket-edit .attachments .file-item {
+  background: var(--box-bg-color);
+  border: var(--box-border);
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  transition: transform 0.2s;
+}
+.ticket-page .attachments .file-item:hover, .ticket-details .attachments .file-item:hover, .ticket-edit .attachments .file-item:hover {
+  transform: translateY(-0.3rem);
+}
+.ticket-page .attachments .image-preview, .ticket-details .attachments .image-preview, .ticket-edit .attachments .image-preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.ticket-page .attachments .image-preview .preview-image, .ticket-details .attachments .image-preview .preview-image, .ticket-edit .attachments .image-preview .preview-image {
+  width: 100%;
+  height: 15rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+}
+.ticket-page .attachments .image-preview .file-name, .ticket-details .attachments .image-preview .file-name, .ticket-edit .attachments .image-preview .file-name {
+  font-size: 1.2rem;
+  word-break: break-word;
+  margin-top: auto;
+}
+.ticket-page .attachments .file-link, .ticket-details .attachments .file-link, .ticket-edit .attachments .file-link {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 1.4rem;
+}
+.ticket-page .ticket-form, .ticket-details .ticket-form, .ticket-edit .ticket-form {
+  background: var(--box-bg-color);
+  border: var(--box-border);
+  border-radius: 0.8rem;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+.ticket-page .ticket-form .form-group, .ticket-details .ticket-form .form-group, .ticket-edit .ticket-form .form-group {
+  margin-bottom: 1.5rem;
+}
+.ticket-page .ticket-form .form-group label, .ticket-details .ticket-form .form-group label, .ticket-edit .ticket-form .form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+}
+.ticket-page .ticket-form .form-group input, .ticket-page .ticket-form .form-group select, .ticket-page .ticket-form .form-group textarea, .ticket-details .ticket-form .form-group input, .ticket-details .ticket-form .form-group select, .ticket-details .ticket-form .form-group textarea, .ticket-edit .ticket-form .form-group input, .ticket-edit .ticket-form .form-group select, .ticket-edit .ticket-form .form-group textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  border: 0.1rem solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text-color);
+  font-size: 1.4rem;
+}
+.ticket-page .ticket-form .form-group input:focus, .ticket-page .ticket-form .form-group select:focus, .ticket-page .ticket-form .form-group textarea:focus, .ticket-details .ticket-form .form-group input:focus, .ticket-details .ticket-form .form-group select:focus, .ticket-details .ticket-form .form-group textarea:focus, .ticket-edit .ticket-form .form-group input:focus, .ticket-edit .ticket-form .form-group select:focus, .ticket-edit .ticket-form .form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.ticket-page .ticket-form .form-group textarea, .ticket-details .ticket-form .form-group textarea, .ticket-edit .ticket-form .form-group textarea {
+  line-height: 1.6;
+  font-family: inherit;
+}
+.ticket-page .ticket-form .form-group select, .ticket-details .ticket-form .form-group select, .ticket-edit .ticket-form .form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d1d1d1'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.5rem;
+  padding-right: 3.5rem;
+}
+.ticket-page .ticket-form .form-group select option, .ticket-details .ticket-form .form-group select option, .ticket-edit .ticket-form .form-group select option {
+  background-color: var(--box-bg-color);
+  color: var(--text-color);
+  padding: 1rem;
+}
+.ticket-page .ticket-form .form-group input, .ticket-page .ticket-form .form-group select, .ticket-page .ticket-form .form-group textarea, .ticket-details .ticket-form .form-group input, .ticket-details .ticket-form .form-group select, .ticket-details .ticket-form .form-group textarea, .ticket-edit .ticket-form .form-group input, .ticket-edit .ticket-form .form-group select, .ticket-edit .ticket-form .form-group textarea {
+  background: rgba(0, 0, 0, 0.3);
+  border: 0.1rem solid rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  transition: all 0.3s;
+}
+.ticket-page .ticket-form .form-group input:focus, .ticket-page .ticket-form .form-group select:focus, .ticket-page .ticket-form .form-group textarea:focus, .ticket-details .ticket-form .form-group input:focus, .ticket-details .ticket-form .form-group select:focus, .ticket-details .ticket-form .form-group textarea:focus, .ticket-edit .ticket-form .form-group input:focus, .ticket-edit .ticket-form .form-group select:focus, .ticket-edit .ticket-form .form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(119, 82, 254, 0.2);
+}
+.ticket-page .ticket-form .form-group input::-moz-placeholder, .ticket-page .ticket-form .form-group select::-moz-placeholder, .ticket-page .ticket-form .form-group textarea::-moz-placeholder, .ticket-details .ticket-form .form-group input::-moz-placeholder, .ticket-details .ticket-form .form-group select::-moz-placeholder, .ticket-details .ticket-form .form-group textarea::-moz-placeholder, .ticket-edit .ticket-form .form-group input::-moz-placeholder, .ticket-edit .ticket-form .form-group select::-moz-placeholder, .ticket-edit .ticket-form .form-group textarea::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.ticket-page .ticket-form .form-group input::placeholder, .ticket-page .ticket-form .form-group select::placeholder, .ticket-page .ticket-form .form-group textarea::placeholder, .ticket-details .ticket-form .form-group input::placeholder, .ticket-details .ticket-form .form-group select::placeholder, .ticket-details .ticket-form .form-group textarea::placeholder, .ticket-edit .ticket-form .form-group input::placeholder, .ticket-edit .ticket-form .form-group select::placeholder, .ticket-edit .ticket-form .form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.ticket-page .ticket-form .form-actions, .ticket-details .ticket-form .form-actions, .ticket-edit .ticket-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.ticket-page .ticket-form .form-actions .save-button, .ticket-details .ticket-form .form-actions .save-button, .ticket-edit .ticket-form .form-actions .save-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  font-weight: 500;
+}
+.ticket-page .ticket-form .form-actions .save-button::before, .ticket-details .ticket-form .form-actions .save-button::before, .ticket-edit .ticket-form .form-actions .save-button::before {
+  content: "✓";
+  font-size: 1.2em;
+}
+.ticket-page .select-wrapper, .ticket-details .select-wrapper, .ticket-edit .select-wrapper {
+  position: relative;
+}
+.ticket-page .select-wrapper::after, .ticket-details .select-wrapper::after, .ticket-edit .select-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 0.5rem solid var(--text-color);
+  pointer-events: none;
+}
+.ticket-page .loading, .ticket-page .error, .ticket-details .loading, .ticket-details .error, .ticket-edit .loading, .ticket-edit .error {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.6rem;
+}
+.ticket-page .error, .ticket-details .error, .ticket-edit .error {
+  color: #ff4444;
+}
+
+select option {
+  background-color: #1a1a2e !important;
+  color: #e6e6e6 !important;
+}
+
+select:focus option:checked {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .ticket-page, .ticket-details, .ticket-edit {
+    padding: 1rem;
+  }
+  .ticket-page .page-header, .ticket-details .page-header, .ticket-edit .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ticket-page .tickets-table, .ticket-details .tickets-table, .ticket-edit .tickets-table {
+    overflow-x: auto;
+  }
+  .ticket-page .tickets-table table, .ticket-details .tickets-table table, .ticket-edit .tickets-table table {
+    min-width: 60rem;
+  }
+}/*# sourceMappingURL=TicketPage.css.map */

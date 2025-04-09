@@ -7,21 +7,40 @@ import { AuthContext } from "./context/AuthContext/AuthContext";
 import TicketCreate from "./components/TicketCreate/TicketCreate";
 import TicketPage from "./pages/TicketPage/TicketPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
+import TicketDetails from "./pages/TicketPage/TicketDetails";
+import TicketEdit from "./pages/TicketPage/TicketEdit";
+import Profile from "./pages/Profile/Profile";
 
 function App() {
   // const { token } = 1;
   const { token } = useContext(AuthContext);
 
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={token ? <Home /> : <Navigate to="/auth" />} />
+        <Route path="/profile" element={token ? <Profile /> : <Navigate to="/auth" />} />
         <Route
           path="/tickets"
           element={token ? <TicketPage /> : <Navigate to="/auth" />}
         />
+         <Route
+          path="/tickets/:id"
+          element={
+              <TicketDetails />
+          }
+        />
+         <Route
+          path="/tickets/:id/edit"
+          element={
+  
+              <TicketEdit />
+
+          }
+        />
         <Route
-          path="/ticket_create"
+          path="/ticket/create"
           element={token ? <TicketCreate /> : <Navigate to="/auth" />}
         />
           <Route

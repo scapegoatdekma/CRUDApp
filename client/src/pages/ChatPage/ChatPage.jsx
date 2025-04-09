@@ -30,9 +30,11 @@ const ChatPage = () => {
   const [showMenu, setShowMenu] = useState(null);
   const [editingMessage, setEditingMessage] = useState(null);
   const [attachments, setAttachments] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const fileInputRef = useRef(null);
+  const { API_URL } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleFileUpload = async (event) => {
@@ -50,7 +52,9 @@ const ChatPage = () => {
           name: file.name,
           type,
           url: previewUrl,
-          file
+          file,
+          size: file.size,
+          mimeType: file.type
         });
       } catch (error) {
         console.error('Error creating preview:', error);
@@ -72,12 +76,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("username");
-    const storedAvatar = localStorage.getItem("avatar");
-    
     if (storedUsername) setUsername(storedUsername);
-    if (storedAvatar) {
-      // Логика установки аватара
-    }
   }, []);
 
   useEffect(() => {
@@ -85,7 +84,6 @@ const ChatPage = () => {
   }, [messages]);
 
   useEffect(() => {
-
     socket.emit('get_history');
 
     const handleHistory = (history) => {
@@ -102,7 +100,7 @@ const ChatPage = () => {
     };
 
     const handleDeleteMessage = (messageId) => {
-      setMessages(previousMessages => previousMessages.filter(message => message.id !== messageId));
+      setMessages(prev => prev.filter(m => m.id !== messageId));
     };
 
     const handleUpdateMessage = (updatedMessage) => {
@@ -111,31 +109,31 @@ const ChatPage = () => {
       ));
     };
 
-    const handleMessagesError = (error) => {
-      console.error('Error loading history:', error);
-      alert('Failed to load message history');
-    };
-
     socket.on('messages_history', handleHistory);
     socket.on('new_message', handleNewMessage);
     socket.on('message_deleted', handleDeleteMessage);
     socket.on('message_updated', handleUpdateMessage);
-    socket.on('messages_error', handleMessagesError);
 
     return () => {
       socket.off('messages_history', handleHistory);
       socket.off('new_message', handleNewMessage);
       socket.off('message_deleted', handleDeleteMessage);
       socket.off('message_updated', handleUpdateMessage);
-      socket.off('messages_error', handleMessagesError);
     };
+
   }, []);
+
+  useEffect(() => {
+    console.log(messages);
+
+  }, [messages])
 
   const handleDeleteMessage = (messageId) => {
     if (window.confirm('Delete message?')) {
       socket.emit('delete_message', { 
         messageId,
-        userId: currentUser.user.id 
+        userId: currentUser.user.id,
+        role: currentUser.user.role
       });
     }
   };
@@ -150,41 +148,42 @@ const ChatPage = () => {
     event.preventDefault();
     
     try {
-      const uploadedFiles = [];
-      const formData = new FormData();
+      const uploadedAttachments = [];
       
-      for (const attachment of attachments) {
-        if (attachment.file) {
-          formData.append('attachments', attachment.file);
-        }
-      }
-  
-      if (formData.has('attachments')) {
-        const uploadResponse = await fetch('/upload', {
+      // Загрузка файлов, если есть
+      if (attachments.length > 0) {
+        const formData = new FormData();
+        attachments.forEach(attachment => {
+          if (attachment.file) {
+            formData.append('files', attachment.file);
+          }
+        });
+
+        const uploadResponse = await fetch('http://192.168.1.119:4200/upload', {
           method: 'POST',
-          body: formData
+          body: formData,
+          credentials: 'include'
         });
         
         if (!uploadResponse.ok) throw new Error('File upload failed');
         const result = await uploadResponse.json();
-        uploadedFiles.push(...result);
+        uploadedAttachments.push(...result.files);
       }
-  
+
       if (editingMessage) {
         socket.emit('update_message', {
           id: editingMessage.id,
           text: newMessage.trim(),
           userId: currentUser.user.id,
-          attachments: uploadedFiles
+          attachments: uploadedAttachments
         });
         setEditingMessage(null);
-      } else if (newMessage.trim() || uploadedFiles.length > 0) {
+      } else {
         socket.emit('new_message', {
           text: newMessage.trim(),
           username: username.trim(),
           user_id: currentUser.user.id,
-          created_at: new Date().toISOString(),
-          attachments: uploadedFiles
+          attachments: uploadedAttachments
         });
       }
       
@@ -194,12 +193,16 @@ const ChatPage = () => {
       
     } catch (error) {
       console.error('Message send error:', error);
-      alert('Error sending message');
+      alert('Error sending message: ' + error.message);
     }
   };
 
-  const isMessageEdited = (message) => {
-    return message.updated_at && new Date(message.updated_at).getTime() > new Date(message.created_at).getTime();
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
   };
 
   return (
@@ -216,13 +219,7 @@ const ChatPage = () => {
           <h2>General Chat</h2>
           <div className="user-info">
             <FontAwesomeIcon icon={faUser} />
-            <input
-              type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="Your name"
-              aria-label="Username"
-            />
+            <span>{username}</span>
           </div>
         </div>
 
@@ -234,89 +231,82 @@ const ChatPage = () => {
             >
               <div className="message-header">
                 <img 
-                  src={'http://localhost:4200' + message.avatar || 'http://localhost:4200/default-avatar.png'} 
+                  src={ API_URL + message.avatar || `${API_URL}/default-avatar.png`} 
                   className="user-badge" 
                   alt={message.username} 
                 />
                 <div className="message-info">
                   <span className="username">{message.username}</span>
                   <span className="timestamp">
-                    {new Date(message.created_at).toLocaleDateString('ru-RU', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    })}, 
-                    {new Date(message.created_at).toLocaleTimeString('ru-RU', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                    {isMessageEdited(message) && (
-                      <span className="edited-badge"> (edited)</span>
+                    {new Date(message.created_at).toLocaleString('ru-RU')}
+                    {message.updated_at && (
+                      <span className="edited-badge">
+                       {message.updated_at && message.updated_at !== message.created_at && '(edited)'}
+                      </span>
                     )}
                   </span>
                 </div>
                 
-                <div className="message-actions">
-                  <button 
-                    className="dots-btn"
-                    onClick={() => setShowMenu(showMenu === index ? null : index)}
-                    aria-label="Message actions"
-                  >
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </button>
-                  
-                  {showMenu === index && (
-                    <div className="actions-menu">
-                      {(currentUser.user.id === message.user_id || currentUser.user.role === 'admin') && (
-                        <button 
-                          onClick={() => handleDeleteMessage(message.id)}
-                          className="delete-btn"
-                        >
+                {(message.user_id === currentUser.user.id || currentUser.user.role === 'admin') && (
+                  <div className="message-actions">
+                    <button onClick={() => setShowMenu(showMenu === index ? null : index)}>
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
+                    </button>
+                    
+                    {showMenu === index && (
+                      <div className="actions-menu">
+                        <button onClick={() => handleDeleteMessage(message.id)}>
                           <FontAwesomeIcon icon={faTrash} /> Delete
                         </button>
-                      )}
-                      {currentUser.user.id === message.user_id && (
-                        <button 
-                          onClick={() => handleEditMessage(message)}
-                          className="edit-btn"
-                        >
-                          <FontAwesomeIcon icon={faEdit} /> Edit
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
+                        {message.user_id === currentUser.user.id && (
+                          <button onClick={() => handleEditMessage(message)}>
+                            <FontAwesomeIcon icon={faEdit} /> Edit
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               
               <div className="message-content">
-                {message.text && message.text.split('\n').map((line, lineIndex) => (
-                  <p key={lineIndex}>{line}</p>
+                {message.text && message.text.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
                 ))}
-                {message.attachments?.map((file, fileIndex) => (
-                  <div key={fileIndex} className="attachment-item">
-                    {file.type === 'image' ? (
-                      <img 
-                        src={file.url} 
-                        alt={file.name} 
-                        onError={(event) => {
-                          event.target.src = 'http://localhost:4200/default-image.png';
-                          event.target.alt = 'Failed to load image';
-                        }}
-                      />
-                    ) : file.type === 'video' ? (
-                      <video controls playsInline>
-                        <source src={file.url} type={`video/${file.url.split('.').pop()}`} />
-                        Your browser does not support video
-                      </video>
-                    ) : file.type === 'audio' ? (
-                      <audio controls>
-                        <source src={file.url} type={`audio/${file.url.split('.').pop()}`} />
-                        Your browser does not support audio
-                      </audio>
+                
+                {message.attachments && message.attachments.map((file, i) => (
+                  <div key={i} className="attachment-item">
+                    {file.type.startsWith('image/') ? (
+                      <div className="image-attachment">
+                        <img 
+                          src={`${API_URL}/uploads/${file.filename}`} 
+                          alt={file.originalname}
+                          onClick={() => window.open(`${API_URL}/uploads/${file.filename}`, '_blank')}
+                        />
+                        <span>{file.originalname} ({formatFileSize(file.size)})</span>
+                      </div>
+                    ) : file.type.startsWith('video/') ? (
+                      <div className="video-attachment">
+                        <video controls>
+                          <source 
+                            src={`${API_URL}/uploads/${file.filename}`} 
+                            type={file.type} 
+                          />
+                        </video>
+                        <span>{file.originalname} ({formatFileSize(file.size)})</span>
+                      </div>
                     ) : (
-                      <a href={file.url} download={file.name}>
-                        <FontAwesomeIcon icon={faFile} /> {file.name}
-                      </a>
+                      <div className="file-attachment">
+                        <a 
+                          href={`${API_URL}/uploads/${file.filename}`} 
+                          download={file.originalname}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                        >
+                          <FontAwesomeIcon icon={faFile} />
+                          <span>{file.originalname} ({formatFileSize(file.size)})</span>
+                        </a>
+                      </div>
                     )}
                   </div>
                 ))}
@@ -330,24 +320,22 @@ const ChatPage = () => {
           <div className="attachments-preview">
             {attachments.map((file, index) => (
               <div key={index} className="attachment-item">
-                {file.type === 'image' && (
+                {file.type.startsWith('image/') ? (
                   <img src={file.url} alt={file.name} />
-                )}
-                {file.type === 'video' && (
-                  <video controls playsInline>
-                    <source src={file.url} type="video/mp4" />
+                ) : file.type.startsWith('video/') ? (
+                  <video controls>
+                    <source src={file.url} type={file.type} />
                   </video>
-                )}
-                {file.type === 'audio' && (
-                  <audio controls>
-                    <source src={file.url} type="audio/mpeg" />
-                  </audio>
+                ) : (
+                  <div>
+                    <FontAwesomeIcon icon={faFile} />
+                    <span>{file.name} ({formatFileSize(file.size)})</span>
+                  </div>
                 )}
                 <button 
                   type="button" 
                   onClick={() => removeAttachment(index)}
                   className="remove-attachment"
-                  aria-label="Remove attachment"
                 >
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
@@ -363,24 +351,20 @@ const ChatPage = () => {
                   type="file"
                   multiple
                   onChange={handleFileUpload}
-                  accept="image/*, video/*, audio/*"
+                  accept="image/*, video/*, audio/*, .pdf, .doc, .docx, .xls, .xlsx"
                   ref={fileInputRef}
-                  className="file-input"
-                  aria-label="Add attachments"
                   style={{ display: 'none' }}
                 />
               </label>
               <textarea
                 value={newMessage}
-                onChange={(event) => setNewMessage(event.target.value)}
+                onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Write your message..."
                 rows="3"
-                aria-label="Message text"
               />
             </div>
             <button 
               type="submit" 
-              className="send-button"
               disabled={!newMessage.trim() && attachments.length === 0}
             >
               <FontAwesomeIcon icon={faPaperPlane} />

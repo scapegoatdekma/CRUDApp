@@ -66,13 +66,13 @@ export class TicketService {
     return rows;
   }
 
-  async getTicketById(ticketId, clientId) {
+  async getTicketById(ticketId) {
     const { rows } = await pool.query(
       `SELECT 
         t.*
       FROM tickets t
-      WHERE t.id = $1 AND t.client_id = $2`,
-      [ticketId, clientId]
+      WHERE t.id = $1`,
+      [ticketId]
     );
     return rows[0];
   }

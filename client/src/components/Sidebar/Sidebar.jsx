@@ -20,6 +20,7 @@ function Sidebar({ isSiderActive }) {
         </div>
       </Link>
       <div className={`sider_content ${isSiderActive ? "active" : ""}`}>
+        <Link to='/profile' className="profile-link">
         <div className="sider-user">
           <img
             src={currentUser.user.avatar ? currentUser.user.avatar : emptyAvatar}
@@ -34,6 +35,7 @@ function Sidebar({ isSiderActive }) {
             </div>
           </div>
         </div>
+        </Link>
         <SidebarMenu />
       </div>
     </aside>

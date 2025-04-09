@@ -1,91 +1,54 @@
-// src/pages/Home/Home.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Layout from "../../Layout/Layout";
+import { STATUS_MAP, PRIORITY_MAP } from "../../constants/ticketConstants"; // Добавлен импорт
 import "./TicketPage.scss";
 
 function TicketPage() {
-    const [isSiderActive, setIsSiderActive] = useState(true);
-    const [tickets, setTickets] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-  
-    const toggleSider = () => {
-      setIsSiderActive(!isSiderActive);
-    };
-  
-    const handleLogout = () => {
-      logout(); // Вызываем функцию logout
-      navigate("/auth");
-    };
-  
-    // Функция для преобразования приоритета в текст
-    const getPriorityText = (priority) => {
-      switch (priority) {
-        case 1:
-          return "Низкий";
-        case 2:
-          return "Средний";
-        case 3:
-          return "Высокий";
-        default:
-          return "Неизвестно";
-      }
-    };
-  
-    // Функция для преобразования статуса в текст
-    const getStatusText = (status) => {
-      switch (status) {
-        case 1:
-          return "Открыт";
-        case 2:
-          return "В процессе";
-        case 3:
-          return "Решён";
-        case 4:
-          return "Закрыт";
-        default:
-          return "Неизвестно";
-      }
-    };
-  
-    useEffect(() => {
-      const fetchTickets = async () => {
-        try {
-          console.log("test");
-          const response = await axios.get("http://localhost:4200/api/tickets");
-          setTickets(response.data);
-          console.log(response);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchTickets();
-    }, []);
-  
-    const handleDelete = async (id) => {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTickets = async () => {
       try {
-        await axios.delete(`http://localhost:4200/api/tickets/${id}`);
-        setTickets(tickets.filter((ticket) => ticket.id !== id));
+        const response = await axios.get("http://localhost:4200/api/tickets");
+        setTickets(response.data);
       } catch (error) {
-        console.error("Ошибка при удалении тикета:", error);
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-  
-    return (
-      <Layout isSiderActive={isSiderActive} toggleSider={toggleSider} handleLogout={handleLogout}>
-        {loading && <div>Загрузка...</div>}
-        {error && <div>Ошибка: {error}</div>}
-        {!loading && (
-          <div className="ticket-list">
-            <h1>Список тикетов</h1>
-            <Link to="/ticket_create" className="btn-primary">
-              Создать новый тикет
-            </Link>
+    fetchTickets();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:4200/api/tickets/${id}`);
+      setTickets(tickets.filter((ticket) => ticket.id !== id));
+    } catch (error) {
+      console.error("Ошибка при удалении тикета:", error);
+    }
+  };
+
+  return (
+    <Layout>
+      <div className="ticket-page">
+        <div className="page-header">
+          <h1>Управление заявками</h1>
+          <Link to="/ticket/create" className="create-button">
+            + Новая заявка
+          </Link>
+        </div>
+
+        {loading && <div className="loading">Загрузка...</div>}
+        {error && <div className="error">Ошибка: {error}</div>}
+
+        {!loading && !error && (
+          <div className="tickets-table">
             <table>
               <thead>
                 <tr>
@@ -102,18 +65,42 @@ function TicketPage() {
                 {tickets.map((ticket) => (
                   <tr key={ticket.id}>
                     <td>
-                      <Link to={`/tickets/${ticket.id}`}>{ticket.id}</Link>
+                      <Link to={`/tickets/${ticket.id}`} className="ticket-link">
+                        #{ticket.id}
+                      </Link>
                     </td>
                     <td>{ticket.title}</td>
-                    <td>{ticket.category}</td>
-                    <td>{getPriorityText(ticket.priority)}</td> {/* Преобразуем приоритет */}
-                    <td>{getStatusText(ticket.status)}</td> {/* Преобразуем статус */}
-                    <td>{new Date(ticket.created_at).toLocaleDateString()}</td>
+                    <td>{ticket.category || "Без категории"}</td>
                     <td>
-                      <button onClick={() => navigate(`/tickets/${ticket.id}/edit`)}>
-                        Редактировать
+                      <span 
+                        className="priority-badge"
+                        style={{ backgroundColor: PRIORITY_MAP[ticket.priority]?.color }}
+                      >
+                        {PRIORITY_MAP[ticket.priority]?.text}
+                      </span>
+                    </td>
+                    <td>
+                      <span 
+                        className="status-badge"
+                        style={{ backgroundColor: STATUS_MAP[ticket.status_id]?.color }}
+                      >
+                        {STATUS_MAP[ticket.status_id]?.text}
+                      </span>
+                    </td>
+                    <td>{new Date(ticket.created_at).toLocaleDateString("ru-RU")}</td>
+                    <td className="actions">
+                      <button 
+                        onClick={() => navigate(`/tickets/${ticket.id}/edit`)}
+                        className="edit-button"
+                      >
+                        ✏️
                       </button>
-                      <button onClick={() => handleDelete(ticket.id)}>Удалить</button>
+                      <button 
+                        onClick={() => handleDelete(ticket.id)}
+                        className="delete-button"
+                      >
+                        🗑️
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -121,8 +108,9 @@ function TicketPage() {
             </table>
           </div>
         )}
-      </Layout>
-    );
-  }
-  
-  export default TicketPage;
+      </div>
+    </Layout>
+  );
+}
+
+export default TicketPage;

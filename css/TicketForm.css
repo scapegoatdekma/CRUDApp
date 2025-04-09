@@ -1,0 +1,259 @@
+.ticket-create {
+  padding: 2.4rem;
+  background: var(--box-bg-color);
+  border: var(--box-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
+  margin: 2rem;
+  font-family: "Montserrat", sans-serif;
+}
+.ticket-create__header {
+  font-size: 2.8rem;
+  color: var(--primary);
+  margin-bottom: 3.2rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--primary) 80%, transparent 20%);
+  font-weight: 600;
+}
+.ticket-create .user-info {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: color-mix(in srgb, var(--box-bg-color) 92%, white 8%);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+.ticket-create .user-info h3 {
+  color: var(--text-color);
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+.ticket-create .user-info .info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.6rem;
+}
+.ticket-create .user-info .info-grid .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem;
+  background: color-mix(in srgb, var(--bg-color) 95%, white 5%);
+  border-radius: 6px;
+}
+.ticket-create .user-info .info-grid .info-item span:first-child {
+  color: color-mix(in srgb, var(--text-color) 70%, transparent 30%);
+  font-weight: 500;
+  min-width: 90px;
+  font-size: 1.2rem;
+}
+.ticket-create .user-info .info-grid .info-item span:last-child {
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--text-color);
+}
+.ticket-create .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2.4rem;
+  margin-bottom: 1 0.2rem;
+}
+.ticket-create .form-group {
+  margin-bottom: 2.4rem;
+}
+.ticket-create .form-group label {
+  display: block;
+  margin-bottom: 1.2rem;
+  color: color-mix(in srgb, var(--text-color) 90%, white 10%);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+.ticket-create .form-group select,
+.ticket-create .form-group textarea,
+.ticket-create .form-group input {
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  background: color-mix(in srgb, var(--bg-color) 97%, white 7%);
+  border: 1px solid color-mix(in srgb, var(--box-border-color) 50%, transparent 50%);
+  border-radius: 8px;
+  color: var(--text-color);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+}
+.ticket-create .form-group select:focus,
+.ticket-create .form-group textarea:focus,
+.ticket-create .form-group input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent 80%);
+  outline: none;
+}
+.ticket-create .form-group select::-moz-placeholder, .ticket-create .form-group textarea::-moz-placeholder, .ticket-create .form-group input::-moz-placeholder {
+  color: color-mix(in srgb, var(--text-color) 60%, transparent 40%);
+}
+.ticket-create .form-group select::placeholder,
+.ticket-create .form-group textarea::placeholder,
+.ticket-create .form-group input::placeholder {
+  color: color-mix(in srgb, var(--text-color) 60%, transparent 40%);
+}
+.ticket-create .form-group .priority-buttons {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.8rem;
+}
+.ticket-create .form-group .priority-buttons button {
+  flex: 1;
+  padding: 1rem 1.6rem;
+  background: color-mix(in srgb, var(--primary) 25%, black 60%);
+  border: 1px solid color-mix(in srgb, var(--box-border-color) 70%, transparent 30%);
+  color: var(--text-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.ticket-create .form-group .priority-buttons button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 30%, transparent 70%);
+}
+.ticket-create .form-group .priority-buttons button:hover:not(.active) {
+  background: color-mix(in srgb, var(--box-bg-color) 80%, black 92%);
+  transform: translateY(-1px);
+}
+.ticket-create .file-upload {
+  margin: 3rem 0 4rem;
+}
+.ticket-create .file-upload .upload-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 2rem;
+  font-weight: 600;
+  font-size: 1.6rem;
+}
+.ticket-create .file-upload .upload-header svg {
+  width: 24px;
+  height: 24px;
+}
+.ticket-create .file-upload .file-previews {
+  max-height: 140px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.ticket-create .file-upload .file-previews .file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem;
+  background: color-mix(in srgb, var(--box-bg-color) 94%, white 6%);
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--box-border-color) 30%, transparent 70%);
+  transition: all 0.2s ease;
+}
+.ticket-create .file-upload .file-previews .file-item:hover {
+  transform: translateX(4px);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.1);
+}
+.ticket-create .file-upload .file-previews .file-item .file-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-grow: 1;
+  margin-right: 2.4rem;
+}
+.ticket-create .file-upload .file-previews .file-item .file-info img {
+  aspect-ratio: 1;
+  max-height: 40px;
+}
+.ticket-create .file-upload .file-previews .file-item .file-info .file-name {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  display: block;
+  max-width: 320px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 400;
+}
+.ticket-create .file-upload .file-previews .file-item .file-info .file-size {
+  color: color-mix(in srgb, var(--text-color) 60%, transparent 40%);
+  font-size: 1.3rem;
+  margin-top: 0.4rem;
+}
+.ticket-create .file-upload .file-previews .file-item .remove-btn {
+  background: none;
+  border: none;
+  color: color-mix(in srgb, #ff4444 90%, white 10%);
+  cursor: pointer;
+  padding: 0.6rem;
+  transition: all 0.2s ease;
+}
+.ticket-create .file-upload .file-previews .file-item .remove-btn:hover {
+  color: #ff4444;
+  transform: scale(1.1);
+}
+.ticket-create .file-upload .file-previews .file-item .remove-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.ticket-create .form-actions {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3.2rem;
+  justify-content: flex-end;
+}
+.ticket-create .form-actions button {
+  padding: 1.2rem 3.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  font-size: 1.5rem;
+  border: 2px solid transparent;
+}
+.ticket-create .form-actions button.submit-btn {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--primary) 30%, transparent 70%);
+}
+.ticket-create .form-actions button.submit-btn:hover {
+  background: color-mix(in srgb, var(--primary) 90%, black 10%);
+  transform: translateY(-2px);
+}
+.ticket-create .form-actions button.cancel-btn {
+  background: transparent;
+  border-color: color-mix(in srgb, var(--text-color) 30%, transparent 70%);
+  color: var(--text-color);
+}
+.ticket-create .form-actions button.cancel-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+@media (max-width: 768px) {
+  .ticket-create {
+    padding: 1.6rem;
+    margin: 1rem;
+  }
+  .ticket-create__header {
+    font-size: 2.4rem;
+  }
+  .ticket-create .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+  .ticket-create .form-actions {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .ticket-create .form-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+}/*# sourceMappingURL=TicketForm.css.map */

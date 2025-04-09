@@ -115,10 +115,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params; // ID тикета
-    const { clientId } = req.query; // ID клиента
+    // const { clientId } = req.query; // ID клиента
 
     // Получаем тикет по ID
-    const ticket = await ticketService.getTicketById(id, clientId);
+    const ticket = await ticketService.getTicketById(id);
 
     if (!ticket) {
       return res.status(404).json({ error: "Тикет не найден" });

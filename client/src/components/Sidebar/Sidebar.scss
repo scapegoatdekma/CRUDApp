@@ -17,6 +17,10 @@
     width: 20%;
     // display: flex;
   }
+  .profile-link{
+    color: rgb(231, 231, 231);
+  
+  }
   .logo {
     position: relative;
     border-right: 1px solid #35353565;
@@ -51,13 +55,42 @@
     // margin-top: 2rem;
     align-items: center;
     justify-content: center;
+
+    position: relative; // Для позиционирования псевдоэлемента
+    background-color: #090b21;
+    overflow: hidden; // Чтобы градиент не выходил за границы
+  
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        rgba(0, 0, 0, 0.6) 0,
+        rgba(10, 6, 34, 0.6) calc(var(--gradient-offset) + 40%),
+        var(--primary) calc(var(--gradient-offset) + 80%),
+        #fff calc(var(--gradient-offset) + 120%)
+      );
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      z-index: 0;
+    }
+  
+    &:hover::before {
+      opacity: 1;
+    }
+    
     .avatar {
+      z-index: 2;
       aspect-ratio: 1;
       height: 5rem;
       object-fit: cover;
       border-radius: 50%;
     }
     .content {
+      z-index: 2;
       font-size: 1.5rem;
       .name {
         font-weight: 700;

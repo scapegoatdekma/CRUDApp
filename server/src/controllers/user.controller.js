@@ -151,30 +151,36 @@ router.post("/auth", authLimiter, async (req, res) => {
 // Получение информации о текущем пользователе
 router.get("/me", authMiddleware, async (req, res) => {
   try {
+    // Получаем ID из токена (authMiddleware должен добавлять user в req)
+    const userId = req.user.id; // Предполагая, что authMiddleware добавляет user
+    
     const { rows } = await pool.query(
-      "SELECT id, username, email, avatar, role FROM users WHERE id = $1",
-      [req.user.id]
+      `SELECT u.id, u.username, u.email, u.avatar, u.role, u.created_at,
+              ep.position, ep.points, ep.rating
+       FROM users u
+       LEFT JOIN employee_profiles ep ON u.id = ep.user_id
+       WHERE u.id = $1`,
+      [userId]
     );
 
     if (!rows.length) {
       return res.status(404).json({
         success: false,
-        error: "Пользователь с указанным ID не найден"
+        error: "Пользователь не найден"
       });
     }
 
     const user = rows[0];
-    user.avatar = `http://localhost:4200${user.avatar}`;
+    user.avatar = user.avatar 
+      ? `http://localhost:4200${user.avatar}`
+      : 'http://localhost:4200/default-avatar.png';
 
-    res.json({
-      success: true,
-      user
-    });
+    res.json({ success: true, user });
   } catch (error) {
-    console.error("Ошибка получения пользователя:", error);
-    res.status(500).json({
+    console.error("Ошибка:", error);
+    res.status(500).json({ 
       success: false,
-      error: "Ошибка при получении данных пользователя"
+      error: "Внутренняя ошибка сервера" 
     });
   }
 });

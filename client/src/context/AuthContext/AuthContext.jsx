@@ -56,7 +56,8 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     login,
     logout,
-    updateUser: setCurrentUser
+    updateUser: setCurrentUser,
+    API_URL: 'http://192.168.1.119:4200'
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
